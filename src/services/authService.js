@@ -70,13 +70,17 @@ export async function login(username, password) {
   if (!MODE_TIRUAN) {
     try {
       const { data } = await api.post("/auth/login", { username, password });
-      // Simpan objek gabungan pengguna + token
+      if (!data.token || !data.pengguna) {
+        throw new Error("Server tidak mengembalikan token.");
+      }
       const sesiData = { ...data.pengguna, token: data.token };
       simpanSesi(sesiData);
       return data.pengguna;
     } catch (e) {
+      // Jika backend kirim detail, tampilkan itu
       throw new Error(
         e?.response?.data?.detail ||
+          e?.message ||
           (e?.response?.status === 401
             ? "Username atau password salah."
             : "Tidak dapat masuk. Silakan coba lagi.")
