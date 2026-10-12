@@ -5,8 +5,8 @@ export async function fetchPengguna() {
   return data.data || [];
 }
 
-export async function tambahPengguna({ nama, email, peran }) {
-  const { data } = await api.post("/api/pengguna", { nama, email, peran });
+export async function tambahPengguna({ nama, email, peran, password }) {
+  const { data } = await api.post("/api/pengguna", { nama, email, peran, password });
   return data;
 }
 
