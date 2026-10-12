@@ -26,7 +26,7 @@ export default function AuthLayout({ children }) {
                 </div>
               ) : (
                 <img
-                  src="/logo-magelang.png"
+                  src="/amara_bulat.png"
                   alt="Lambang Kota Magelang"
                   onError={() => setLogoGagal(true)}
                   className="h-full w-full origin-center scale-[2.2] object-contain"

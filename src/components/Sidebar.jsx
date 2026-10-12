@@ -96,9 +96,7 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
             collapsed ? "" : "lg:justify-start"
           }`}
         >
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald">
-            <Bot size={20} aria-hidden="true" />
-          </div>
+          <img src="/amara_bulat.png" alt="AMARA" className="h-9 w-9 shrink-0 rounded-full object-cover bg-white" />
           <div className={`min-w-0 ${penuh}`}>
             <p className="text-sm font-bold leading-tight">AMARA Bot</p>
             <p className="truncate text-[11px] leading-tight text-blue-100">
