@@ -5,8 +5,8 @@ export async function fetchPengguna() {
   return data.data || [];
 }
 
-export async function tambahPengguna({ nama, email, peran, password }) {
-  const { data } = await api.post("/api/pengguna", { nama, email, peran, password });
+export async function tambahPengguna({ nama, email, peran, password, username }) {
+  const { data } = await api.post("/api/pengguna", { nama, email, peran, password, username });
   return data;
 }
 
@@ -22,5 +22,10 @@ export async function ubahStatusPengguna(id, status) {
 
 export async function hapusPengguna(id) {
   const { data } = await api.delete(`/api/pengguna/${id}`);
+  return data;
+}
+
+export async function resetPassword(id, password) {
+  const { data } = await api.post(`/api/pengguna/${id}/reset-password`, { password });
   return data;
 }

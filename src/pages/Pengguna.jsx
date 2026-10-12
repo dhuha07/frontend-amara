@@ -7,6 +7,7 @@ import {
   UserX,
   UserCheck,
   Trash2,
+  KeyRound,
   X,
   Loader2,
   CircleAlert,
@@ -25,6 +26,7 @@ import {
   ubahPengguna,
   ubahStatusPengguna,
   hapusPengguna,
+  resetPassword,
 } from "../services/penggunaService";
 import { formatTanggal } from "../utils/formatDate";
 import { PERAN_LIST, ROWS_PER_PAGE } from "../utils/constants";
@@ -54,6 +56,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // ---------- Formulir tambah / ubah pengguna (modal) ----------
 function FormPengguna({ mode, pengguna, onSimpan, onTutup }) {
   const [nama, setNama] = useState(pengguna?.nama || "");
+  const [username, setUsername] = useState(pengguna?.username || "");
   const [email, setEmail] = useState(pengguna?.email || "");
   const [peran, setPeran] = useState(pengguna?.peran || "Petugas");
   const [password, setPassword] = useState("");
@@ -77,6 +80,9 @@ function FormPengguna({ mode, pengguna, onSimpan, onTutup }) {
   const validasi = () => {
     const e = {};
     if (nama.trim().length < 3) e.nama = "Nama minimal 3 karakter.";
+    if (!username.trim()) e.username = "Username wajib diisi.";
+    else if (username.trim().length < 3) e.username = "Username minimal 3 karakter.";
+    else if (!/^[a-zA-Z0-9_]+$/.test(username.trim())) e.username = "Hanya huruf, angka, underscore.";
     if (!email.trim()) e.email = "Email wajib diisi.";
     else if (!EMAIL_REGEX.test(email.trim())) e.email = "Format email tidak valid.";
     if (!PERAN_LIST.includes(peran)) e.peran = "Pilih peran pengguna.";
@@ -92,12 +98,13 @@ function FormPengguna({ mode, pengguna, onSimpan, onTutup }) {
 
     setMenyimpan(true);
     try {
-      const data = { nama, email, peran };
+      const data = { nama, username: username.trim(), email, peran };
       if (mode === "tambah") data.password = password;
       await onSimpan(data);
     } catch (err) {
-      const pesan = err?.message || "Gagal menyimpan data pengguna.";
+      const pesan = err?.response?.data?.detail || err?.message || "Gagal menyimpan data pengguna.";
       if (pesan.toLowerCase().includes("email")) setGalat({ email: pesan });
+      else if (pesan.toLowerCase().includes("username")) setGalat({ username: pesan });
       else toast.error(pesan);
       setMenyimpan(false);
     }
@@ -150,6 +157,22 @@ function FormPengguna({ mode, pengguna, onSimpan, onTutup }) {
               className={`${inputKelas} ${galat.nama ? "border-red-400" : "border-gray-200"}`}
             />
             {galat.nama && <p className="mt-1 text-xs text-red-800">{galat.nama}</p>}
+          </div>
+
+          <div>
+            <label htmlFor="f-username" className="mb-1 block text-sm font-medium text-gray-900">
+              Username
+            </label>
+            <input
+              id="f-username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="username tanpa spasi"
+              aria-invalid={Boolean(galat.username)}
+              className={`${inputKelas} ${galat.username ? "border-red-400" : "border-gray-200"}`}
+            />
+            {galat.username && <p className="mt-1 text-xs text-red-800">{galat.username}</p>}
           </div>
 
           <div>
@@ -251,6 +274,9 @@ export default function Pengguna() {
   const [modal, setModal] = useState(null);
   const [konfirmasi, setKonfirmasi] = useState(null);
   const [konfirmasiHapus, setKonfirmasiHapus] = useState(null);
+  const [resetTarget, setResetTarget] = useState(null);
+  const [resetPwd, setResetPwd] = useState("");
+  const [resetGagal, setResetGagal] = useState("");
   const [prosesId, setProsesId] = useState(null);
 
   const muatData = useCallback(async () => {
@@ -285,7 +311,7 @@ export default function Pengguna() {
     return daftar.filter((u) => {
       if (filterPeran && u.peran !== filterPeran) return false;
       if (filterStatus && u.status !== filterStatus) return false;
-      if (kunci && !`${u.nama} ${u.email}`.toLowerCase().includes(kunci)) return false;
+      if (kunci && !`${u.nama} ${u.username} ${u.email}`.toLowerCase().includes(kunci)) return false;
       return true;
     });
   }, [daftar, cari, filterPeran, filterStatus]);
@@ -346,7 +372,28 @@ export default function Pengguna() {
       setDaftar((prev) => prev.filter((x) => x.id !== u.id));
       toast.success(`${u.nama} berhasil dihapus`);
     } catch (err) {
-      toast.error(err?.message || "Gagal menghapus pengguna.");
+      toast.error(err?.response?.data?.detail || err?.message || "Gagal menghapus pengguna.");
+    } finally {
+      setProsesId(null);
+    }
+  };
+
+  // Reset password
+  const kirimReset = async (ev) => {
+    ev.preventDefault();
+    if (resetPwd.length < 6) {
+      setResetGagal("Password minimal 6 karakter.");
+      return;
+    }
+    setProsesId(resetTarget.id);
+    try {
+      await resetPassword(resetTarget.id, resetPwd);
+      toast.success(`Password ${resetTarget.nama} berhasil direset`);
+      setResetTarget(null);
+      setResetPwd("");
+      setResetGagal("");
+    } catch (err) {
+      setResetGagal(err?.response?.data?.detail || err?.message || "Gagal reset password.");
     } finally {
       setProsesId(null);
     }
@@ -478,6 +525,7 @@ export default function Pengguna() {
                 <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-600">
                   <tr>
                     <th scope="col" className="px-4 py-3 font-semibold md:px-5">Nama</th>
+                    <th scope="col" className="px-4 py-3 font-semibold">Username</th>
                     <th scope="col" className="px-4 py-3 font-semibold">Email</th>
                     <th scope="col" className="px-4 py-3 font-semibold">Peran</th>
                     <th scope="col" className="px-4 py-3 font-semibold">Status</th>
@@ -499,6 +547,7 @@ export default function Pengguna() {
                           <span className="font-medium text-gray-900">{u.nama}</span>
                         </div>
                       </td>
+                      <td className="px-4 py-3 text-xs font-mono text-gray-600">{u.username}</td>
                       <td className="px-4 py-3 text-gray-600">{u.email}</td>
                       <td className="px-4 py-3">
                         <Lencana gaya={PERAN_STYLE[u.peran]}>{u.peran}</Lencana>
@@ -510,7 +559,7 @@ export default function Pengguna() {
                         {u.terakhirLogin ? formatTanggal(u.terakhirLogin) : "Belum pernah"}
                       </td>
                       <td className="px-4 py-3 md:px-5">
-                        <div className="flex items-center gap-1">
+                        <div className="flex flex-wrap items-center gap-1">
                           <button
                             type="button"
                             onClick={() => setModal({ mode: "ubah", pengguna: u })}
@@ -519,6 +568,15 @@ export default function Pengguna() {
                           >
                             <Pencil size={14} aria-hidden="true" />
                             Ubah
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => { setResetTarget(u); setResetPwd(""); setResetGagal(""); }}
+                            disabled={prosesId === u.id}
+                            className={`${aksiKelas} text-amber-700 hover:bg-amber-50`}
+                          >
+                            <KeyRound size={14} aria-hidden="true" />
+                            Reset
                           </button>
                           <button
                             type="button"
@@ -606,6 +664,21 @@ export default function Pengguna() {
         }}
         onCancel={() => setKonfirmasiHapus(null)}
       />
+
+      {resetTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setResetTarget(null)}>
+          <form onSubmit={kirimReset} onClick={(e) => e.stopPropagation()} className="w-full max-w-sm rounded-xl bg-white p-5 shadow-lg">
+            <h3 className="text-base font-semibold text-gray-900">Reset Password - {resetTarget.nama}</h3>
+            <p className="mt-1 text-xs text-gray-500">Username: {resetTarget.username}</p>
+            <input type="password" value={resetPwd} onChange={(e) => setResetPwd(e.target.value)} placeholder="Password baru minimal 6 karakter" className={`${inputKelas} mt-4 border-gray-200`} />
+            {resetGagal && <p className="mt-1 text-xs text-red-600">{resetGagal}</p>}
+            <div className="mt-4 flex justify-end gap-2">
+              <button type="button" onClick={() => setResetTarget(null)} className="min-h-[44px] rounded-lg border border-gray-200 bg-white px-4 text-sm">Batal</button>
+              <button type="submit" disabled={prosesId === resetTarget.id} className="min-h-[44px] rounded-lg bg-amber-600 px-4 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-50">{prosesId === resetTarget.id ? "Menyimpan..." : "Reset"}</button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
