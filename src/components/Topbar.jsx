@@ -199,11 +199,12 @@ export default function Topbar({ onMenuClick, onToggleCollapse, collapsed = fals
             aria-expanded={menuAkun}
             className="flex min-h-[44px] items-center gap-2 rounded-lg px-1.5 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
           >
-            <img
-              src="/amara_bulat.png"
-              alt="Avatar"
-              className="h-8 w-8 rounded-full bg-white object-cover shadow-sm"
-            />
+            <span
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald text-sm font-bold"
+              aria-hidden="true"
+            >
+              {inisial}
+            </span>
             <span className="hidden max-w-[140px] truncate text-sm font-medium sm:inline">
               {namaTampil}
             </span>
