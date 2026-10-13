@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import {
   LayoutDashboard,
   FileText,
@@ -8,8 +9,12 @@ import {
   Users,
   Bot,
   X,
+  LogOut,
+  UserCog,
+  ChevronUp,
 } from "lucide-react";
 import api from "../services/api";
+import { useAuth } from "../context/AuthContext";
 
 // Daftar menu navigasi
 const MENU = [
@@ -22,8 +27,12 @@ const MENU = [
 
 export default function Sidebar({ open, onClose, collapsed = false }) {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { pengguna, keluar } = useAuth();
   const [botStatus, setBotStatus] = useState("checking");
   const [botMessage, setBotMessage] = useState("Memeriksa status...");
+  const [menuProfil, setMenuProfil] = useState(false);
+  const profilRef = useRef(null);
 
   // Cek status bot setiap 5 detik
   useEffect(() => {
@@ -51,6 +60,20 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
   // Kelas bantu: tampilan penuh (teks) vs ringkas (hanya ikon)
   const penuh = `md:hidden ${collapsed ? "" : "lg:block"}`;
   const ringkas = `hidden md:flex ${collapsed ? "" : "lg:hidden"}`;
+
+  // Tutup menu profil saat klik di luar
+  useEffect(() => {
+    if (!menuProfil) return;
+    const klikLuar = (e) => {
+      if (profilRef.current && !profilRef.current.contains(e.target)) setMenuProfil(false);
+    };
+    document.addEventListener("mousedown", klikLuar);
+    return () => document.removeEventListener("mousedown", klikLuar);
+  }, [menuProfil]);
+
+  const namaTampil = pengguna?.nama || "Admin";
+  const peranTampil = pengguna?.peran || "Super Admin";
+  const inisial = namaTampil.charAt(0).toUpperCase();
 
   // Tutup drawer otomatis saat pindah halaman
   useEffect(() => {
@@ -194,34 +217,58 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
             )}
           </div>
 
-          {/* Profil admin - tampilan penuh */}
-          <div
-            className={`items-center gap-3 rounded-xl px-1 ${
-              collapsed ? "flex md:hidden" : "flex md:hidden lg:flex"
-            }`}
-          >
-            <div
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald text-sm font-bold"
-              aria-hidden="true"
+          {/* Profil admin - interaktif */}
+          <div className="relative" ref={profilRef}>
+            <button
+              type="button"
+              onClick={() => setMenuProfil((v) => !v)}
+              className={`w-full flex items-center gap-3 rounded-xl px-2 py-1.5 hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald ${
+                collapsed ? "justify-center md:hidden" : "justify-start"
+              }`}
             >
-              A
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold leading-tight">Admin</p>
-              <p className="truncate text-[11px] leading-tight text-blue-100">
-                Super Admin
-              </p>
-            </div>
-          </div>
+              <div
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald text-sm font-bold text-white"
+                aria-hidden="true"
+              >
+                {inisial}
+              </div>
+              <div className={`min-w-0 flex-1 text-left ${penuh}`}>
+                <p className="truncate text-sm font-semibold leading-tight text-white">{namaTampil}</p>
+                <p className="truncate text-[11px] leading-tight text-blue-200">
+                  {peranTampil}
+                </p>
+              </div>
+              <ChevronUp size={16} className={`text-blue-200 transition-transform ${menuProfil ? "rotate-180" : ""} ${penuh}`} />
+            </button>
 
-          {/* Profil admin - tampilan ringkas */}
-          <div className={`justify-center ${ringkas}`} title="Admin (Super Admin)">
-            <div
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald text-sm font-bold"
-              aria-hidden="true"
-            >
-              A
-            </div>
+            {menuProfil && (
+              <div className="absolute bottom-full left-0 mb-2 w-full min-w-[200px] overflow-hidden rounded-xl bg-gray-900 border border-gray-700 py-1 text-white shadow-xl z-50">
+                <div className="border-b border-gray-800 px-4 py-2">
+                  <p className="text-xs font-semibold text-gray-400">Masuk sebagai</p>
+                  <p className="truncate text-sm font-bold">{namaTampil}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { setMenuProfil(false); navigate("/pengguna"); }}
+                  className="flex w-full items-center gap-2 px-4 py-2.5 text-xs font-medium hover:bg-gray-800 transition-colors"
+                >
+                  <UserCog size={14} />
+                  Kelola Pengguna
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMenuProfil(false);
+                    keluar();
+                    toast.success("Berhasil keluar");
+                  }}
+                  className="flex w-full items-center gap-2 px-4 py-2.5 text-xs font-medium text-red-400 hover:bg-red-500/10 transition-colors"
+                >
+                  <LogOut size={14} />
+                  Keluar Aplikasi
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </aside>
