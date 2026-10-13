@@ -115,7 +115,7 @@ export default function Topbar({ onMenuClick, onToggleCollapse, collapsed = fals
         type="button"
         onClick={onMenuClick}
         aria-label="Buka menu"
-        className="flex h-11 w-11 items-center justify-center rounded-lg hover:bg-white dark:bg-gray-800/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald md:hidden"
+        className="flex h-11 w-11 items-center justify-center rounded-lg hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald md:hidden"
       >
         <Menu size={22} />
       </button>
@@ -126,7 +126,7 @@ export default function Topbar({ onMenuClick, onToggleCollapse, collapsed = fals
         onClick={onToggleCollapse}
         aria-label={collapsed ? "Bentangkan menu samping" : "Lipat menu samping"}
         title={collapsed ? "Bentangkan menu" : "Lipat menu"}
-        className="hidden h-11 w-11 items-center justify-center rounded-lg hover:bg-white dark:bg-gray-800/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald lg:flex"
+        className="hidden h-11 w-11 items-center justify-center rounded-lg hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald lg:flex"
       >
         <IkonLipat size={22} />
       </button>
@@ -161,7 +161,7 @@ export default function Topbar({ onMenuClick, onToggleCollapse, collapsed = fals
             }}
             aria-label={`Notifikasi, ${belumDibaca} belum dibaca`}
             aria-expanded={terbuka}
-            className="relative flex h-11 w-11 items-center justify-center rounded-lg hover:bg-white dark:bg-gray-800/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
+            className="relative flex h-11 w-11 items-center justify-center rounded-lg hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
           >
             <Bell size={20} />
             {belumDibaca > 0 && (
@@ -235,7 +235,7 @@ export default function Topbar({ onMenuClick, onToggleCollapse, collapsed = fals
             }}
             aria-label={`Menu akun ${namaTampil}`}
             aria-expanded={menuAkun}
-            className="flex min-h-[44px] items-center gap-2 rounded-lg px-1.5 hover:bg-white dark:bg-gray-800/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
+            className="flex min-h-[44px] items-center gap-2 rounded-lg px-1.5 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
           >
             <span
               className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald text-sm font-bold"

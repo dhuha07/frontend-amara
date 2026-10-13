@@ -109,7 +109,7 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
             type="button"
             onClick={onClose}
             aria-label="Tutup menu"
-            className="ml-auto flex h-10 w-10 items-center justify-center rounded-lg hover:bg-white dark:bg-gray-800/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald md:hidden"
+            className="ml-auto flex h-10 w-10 items-center justify-center rounded-lg hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald md:hidden"
           >
             <X size={20} />
           </button>
@@ -134,8 +134,8 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
                     collapsed ? "" : "lg:justify-start lg:px-4"
                   } ${
                     isActive
-                      ? "border-emerald bg-white dark:bg-gray-800/15 text-white"
-                      : "border-transparent text-blue-100 hover:bg-white dark:bg-gray-800/10"
+                      ? "border-emerald bg-white/15 text-white"
+                      : "border-transparent text-blue-100 hover:bg-white/10"
                   }`
                 }
               >
@@ -151,7 +151,7 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
         {/* Bagian bawah: indikator bot dan profil (hanya tampilan, bukan tombol) */}
         <div className="shrink-0 space-y-3 border-t border-white/10 p-3">
           {/* Indikator bot - tampilan penuh */}
-          <div className={`rounded-xl bg-white dark:bg-gray-800/10 p-3 ${penuh}`}>
+          <div className={`rounded-xl bg-white/10 p-3 ${penuh}`}>
             <div className="flex items-center gap-2">
               {botStatus === "online" ? (
                 <>
