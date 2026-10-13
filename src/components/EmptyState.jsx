@@ -13,8 +13,8 @@ export default function EmptyState({
       <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 text-gray-400">
         <Icon size={28} aria-hidden="true" />
       </div>
-      <h3 className="mt-4 text-base font-semibold text-gray-900">{title}</h3>
-      <p className="mt-1 max-w-sm text-sm text-gray-600">{description}</p>
+      <h3 className="mt-4 text-base font-semibold text-gray-900 dark:text-gray-100">{title}</h3>
+      <p className="mt-1 max-w-sm text-sm text-gray-600 dark:text-gray-300">{description}</p>
       {actionLabel && onAction && (
         <button
           type="button"

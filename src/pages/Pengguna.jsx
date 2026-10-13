@@ -32,7 +32,7 @@ import { formatTanggal } from "../utils/formatDate";
 import { PERAN_LIST, ROWS_PER_PAGE } from "../utils/constants";
 
 const inputKelas =
-  "min-h-[44px] w-full rounded-lg border bg-white px-3 text-sm text-gray-900 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald";
+  "min-h-[44px] w-full rounded-lg border bg-white dark:bg-gray-800 px-3 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald";
 
 const PERAN_STYLE = {
   "Super Admin": "bg-blue-100 text-navy",
@@ -124,10 +124,10 @@ function FormPengguna({ mode, pengguna, onSimpan, onTutup }) {
         onSubmit={kirim}
         noValidate
         onClick={(e) => e.stopPropagation()}
-        className="max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-t-2xl bg-white p-5 shadow-lg sm:rounded-xl"
+        className="max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-t-2xl bg-white dark:bg-gray-800 p-5 shadow-lg sm:rounded-xl"
       >
         <div className="flex items-start justify-between gap-3">
-          <h2 id="judul-form-pengguna" className="text-lg font-semibold text-gray-900">
+          <h2 id="judul-form-pengguna" className="text-lg font-semibold text-gray-900 dark:text-gray-100">
             {judul}
           </h2>
           <button
@@ -135,7 +135,7 @@ function FormPengguna({ mode, pengguna, onSimpan, onTutup }) {
             onClick={onTutup}
             disabled={menyimpan}
             aria-label="Tutup formulir"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald disabled:opacity-50"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald disabled:opacity-50"
           >
             <X size={18} />
           </button>
@@ -143,7 +143,7 @@ function FormPengguna({ mode, pengguna, onSimpan, onTutup }) {
 
         <div className="mt-4 space-y-4">
           <div>
-            <label htmlFor="f-nama" className="mb-1 block text-sm font-medium text-gray-900">
+            <label htmlFor="f-nama" className="mb-1 block text-sm font-medium text-gray-900 dark:text-gray-100">
               Nama Lengkap
             </label>
             <input
@@ -154,13 +154,13 @@ function FormPengguna({ mode, pengguna, onSimpan, onTutup }) {
               onChange={(e) => setNama(e.target.value)}
               placeholder="Contoh: Siti Rahmawati"
               aria-invalid={Boolean(galat.nama)}
-              className={`${inputKelas} ${galat.nama ? "border-red-400" : "border-gray-200"}`}
+              className={`${inputKelas} ${galat.nama ? "border-red-400" : "border-gray-200 dark:border-gray-700"}`}
             />
             {galat.nama && <p className="mt-1 text-xs text-red-800">{galat.nama}</p>}
           </div>
 
           <div>
-            <label htmlFor="f-username" className="mb-1 block text-sm font-medium text-gray-900">
+            <label htmlFor="f-username" className="mb-1 block text-sm font-medium text-gray-900 dark:text-gray-100">
               Username
             </label>
             <input
@@ -170,13 +170,13 @@ function FormPengguna({ mode, pengguna, onSimpan, onTutup }) {
               onChange={(e) => setUsername(e.target.value)}
               placeholder="username tanpa spasi"
               aria-invalid={Boolean(galat.username)}
-              className={`${inputKelas} ${galat.username ? "border-red-400" : "border-gray-200"}`}
+              className={`${inputKelas} ${galat.username ? "border-red-400" : "border-gray-200 dark:border-gray-700"}`}
             />
             {galat.username && <p className="mt-1 text-xs text-red-800">{galat.username}</p>}
           </div>
 
           <div>
-            <label htmlFor="f-email" className="mb-1 block text-sm font-medium text-gray-900">
+            <label htmlFor="f-email" className="mb-1 block text-sm font-medium text-gray-900 dark:text-gray-100">
               Email
             </label>
             <input
@@ -186,20 +186,20 @@ function FormPengguna({ mode, pengguna, onSimpan, onTutup }) {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="nama@instansi.go.id"
               aria-invalid={Boolean(galat.email)}
-              className={`${inputKelas} ${galat.email ? "border-red-400" : "border-gray-200"}`}
+              className={`${inputKelas} ${galat.email ? "border-red-400" : "border-gray-200 dark:border-gray-700"}`}
             />
             {galat.email && <p className="mt-1 text-xs text-red-800">{galat.email}</p>}
           </div>
 
           <div>
-            <label htmlFor="f-peran" className="mb-1 block text-sm font-medium text-gray-900">
+            <label htmlFor="f-peran" className="mb-1 block text-sm font-medium text-gray-900 dark:text-gray-100">
               Peran
             </label>
             <select
               id="f-peran"
               value={peran}
               onChange={(e) => setPeran(e.target.value)}
-              className={`${inputKelas} ${galat.peran ? "border-red-400" : "border-gray-200"}`}
+              className={`${inputKelas} ${galat.peran ? "border-red-400" : "border-gray-200 dark:border-gray-700"}`}
             >
               {PERAN_LIST.map((p) => (
                 <option key={p} value={p}>
@@ -212,7 +212,7 @@ function FormPengguna({ mode, pengguna, onSimpan, onTutup }) {
 
           {mode === "tambah" && (
             <div>
-              <label htmlFor="f-password" className="mb-1 block text-sm font-medium text-gray-900">
+              <label htmlFor="f-password" className="mb-1 block text-sm font-medium text-gray-900 dark:text-gray-100">
                 Password
               </label>
               <input
@@ -222,7 +222,7 @@ function FormPengguna({ mode, pengguna, onSimpan, onTutup }) {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Minimal 6 karakter"
                 aria-invalid={Boolean(galat.password)}
-                className={`${inputKelas} ${galat.password ? "border-red-400" : "border-gray-200"}`}
+                className={`${inputKelas} ${galat.password ? "border-red-400" : "border-gray-200 dark:border-gray-700"}`}
               />
               {galat.password && <p className="mt-1 text-xs text-red-800">{galat.password}</p>}
             </div>
@@ -234,7 +234,7 @@ function FormPengguna({ mode, pengguna, onSimpan, onTutup }) {
             type="button"
             onClick={onTutup}
             disabled={menyimpan}
-            className="min-h-[44px] rounded-lg border border-gray-200 bg-white px-4 text-sm font-medium text-gray-600 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald disabled:opacity-50"
+            className="min-h-[44px] rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald disabled:opacity-50"
           >
             Batal
           </button>
@@ -402,7 +402,7 @@ export default function Pengguna() {
   if (error) {
     return (
       <div className="p-4 md:p-6">
-        <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
           <EmptyState
             icon={CircleAlert}
             title="Gagal memuat data pengguna"
@@ -422,8 +422,8 @@ export default function Pengguna() {
     <div className="p-4 md:p-6">
       <div className="mb-4 flex flex-wrap items-start justify-between gap-3 md:mb-6">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Pengguna</h2>
-          <p className="mt-1 text-sm text-gray-600">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Pengguna</h2>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
             {loading ? "Memuat data pengguna..." : `${daftar.length} pengguna terdaftar, ${jumlahAktif} aktif.`}
           </p>
         </div>
@@ -434,7 +434,7 @@ export default function Pengguna() {
             disabled={loading}
             aria-label="Muat ulang data pengguna"
             title="Muat ulang"
-            className="flex h-11 w-11 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald disabled:opacity-60"
+            className="flex h-11 w-11 items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald disabled:opacity-60"
           >
             <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
           </button>
@@ -449,9 +449,9 @@ export default function Pengguna() {
         </div>
       </div>
 
-      <section className="rounded-xl border border-gray-200 bg-white shadow-sm">
+      <section className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
         {/* Pencarian dan filter */}
-        <div className="space-y-3 border-b border-gray-200 p-4 md:p-5">
+        <div className="space-y-3 border-b border-gray-200 dark:border-gray-700 p-4 md:p-5">
           <div className="relative">
             <Search
               size={18}
@@ -464,7 +464,7 @@ export default function Pengguna() {
               onChange={(e) => setCari(e.target.value)}
               placeholder="Cari nama atau email pengguna"
               aria-label="Cari pengguna"
-              className={`${inputKelas} border-gray-200 pl-10`}
+              className={`${inputKelas} border-gray-200 dark:border-gray-700 pl-10`}
             />
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -472,7 +472,7 @@ export default function Pengguna() {
               value={filterPeran}
               onChange={(e) => setFilterPeran(e.target.value)}
               aria-label="Filter peran"
-              className={`${inputKelas} border-gray-200`}
+              className={`${inputKelas} border-gray-200 dark:border-gray-700`}
             >
               <option value="">Semua Peran</option>
               {PERAN_LIST.map((p) => (
@@ -485,7 +485,7 @@ export default function Pengguna() {
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
               aria-label="Filter status"
-              className={`${inputKelas} border-gray-200`}
+              className={`${inputKelas} border-gray-200 dark:border-gray-700`}
             >
               <option value="">Semua Status</option>
               <option value="Aktif">Aktif</option>
@@ -495,7 +495,7 @@ export default function Pengguna() {
               type="button"
               onClick={resetFilter}
               disabled={!adaFilter}
-              className="flex min-h-[44px] items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-sm font-medium text-gray-600 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex min-h-[44px] items-center justify-center gap-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald disabled:cursor-not-allowed disabled:opacity-40"
             >
               <RotateCcw size={16} aria-hidden="true" />
               Reset Filter
@@ -522,7 +522,7 @@ export default function Pengguna() {
           <>
             <div className="overflow-x-auto w-full">
               <table className="w-full min-w-[800px] text-left text-sm">
-                <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-600">
+                <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-600 dark:text-gray-300">
                   <tr>
                     <th scope="col" className="px-4 py-3 font-semibold md:px-5">Nama</th>
                     <th scope="col" className="px-4 py-3 font-semibold">Username</th>
@@ -544,18 +544,18 @@ export default function Pengguna() {
                           >
                             {u.nama.charAt(0).toUpperCase()}
                           </div>
-                          <span className="font-medium text-gray-900">{u.nama}</span>
+                          <span className="font-medium text-gray-900 dark:text-gray-100">{u.nama}</span>
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-xs font-mono text-gray-600">{u.username}</td>
-                      <td className="px-4 py-3 text-gray-600">{u.email}</td>
+                      <td className="px-4 py-3 text-xs font-mono text-gray-600 dark:text-gray-300">{u.username}</td>
+                      <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{u.email}</td>
                       <td className="px-4 py-3">
                         <Lencana gaya={PERAN_STYLE[u.peran]}>{u.peran}</Lencana>
                       </td>
                       <td className="px-4 py-3">
                         <Lencana gaya={STATUS_PENGGUNA_STYLE[u.status]}>{u.status}</Lencana>
                       </td>
-                      <td className="whitespace-nowrap px-4 py-3 text-gray-600">
+                      <td className="whitespace-nowrap px-4 py-3 text-gray-600 dark:text-gray-300">
                         {u.terakhirLogin ? formatTanggal(u.terakhirLogin) : "Belum pernah"}
                       </td>
                       <td className="px-4 py-3 md:px-5">
@@ -667,13 +667,13 @@ export default function Pengguna() {
 
       {resetTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setResetTarget(null)}>
-          <form onSubmit={kirimReset} onClick={(e) => e.stopPropagation()} className="w-full max-w-sm rounded-xl bg-white p-5 shadow-lg">
-            <h3 className="text-base font-semibold text-gray-900">Reset Password - {resetTarget.nama}</h3>
+          <form onSubmit={kirimReset} onClick={(e) => e.stopPropagation()} className="w-full max-w-sm rounded-xl bg-white dark:bg-gray-800 p-5 shadow-lg">
+            <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">Reset Password - {resetTarget.nama}</h3>
             <p className="mt-1 text-xs text-gray-500">Username: {resetTarget.username}</p>
-            <input type="password" value={resetPwd} onChange={(e) => setResetPwd(e.target.value)} placeholder="Password baru minimal 6 karakter" className={`${inputKelas} mt-4 border-gray-200`} />
+            <input type="password" value={resetPwd} onChange={(e) => setResetPwd(e.target.value)} placeholder="Password baru minimal 6 karakter" className={`${inputKelas} mt-4 border-gray-200 dark:border-gray-700`} />
             {resetGagal && <p className="mt-1 text-xs text-red-600">{resetGagal}</p>}
             <div className="mt-4 flex justify-end gap-2">
-              <button type="button" onClick={() => setResetTarget(null)} className="min-h-[44px] rounded-lg border border-gray-200 bg-white px-4 text-sm">Batal</button>
+              <button type="button" onClick={() => setResetTarget(null)} className="min-h-[44px] rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 text-sm">Batal</button>
               <button type="submit" disabled={prosesId === resetTarget.id} className="min-h-[44px] rounded-lg bg-amber-600 px-4 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-50">{prosesId === resetTarget.id ? "Menyimpan..." : "Reset"}</button>
             </div>
           </form>

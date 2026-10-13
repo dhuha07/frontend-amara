@@ -33,7 +33,7 @@ export default function ConfirmDialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby="judul-konfirmasi"
-        className="w-full max-w-md rounded-xl bg-white p-5 shadow-lg"
+        className="w-full max-w-md rounded-xl bg-white dark:bg-gray-800 p-5 shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start gap-3">
@@ -45,10 +45,10 @@ export default function ConfirmDialog({
             <AlertTriangle size={20} aria-hidden="true" />
           </div>
           <div>
-            <h2 id="judul-konfirmasi" className="text-base font-semibold text-gray-900">
+            <h2 id="judul-konfirmasi" className="text-base font-semibold text-gray-900 dark:text-gray-100">
               {title}
             </h2>
-            <p className="mt-1 text-sm text-gray-600">{message}</p>
+            <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">{message}</p>
           </div>
         </div>
 
@@ -56,7 +56,7 @@ export default function ConfirmDialog({
           <button
             type="button"
             onClick={onCancel}
-            className="min-h-[44px] rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
+            className="min-h-[44px] rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
           >
             {cancelText}
           </button>

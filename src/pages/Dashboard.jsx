@@ -55,7 +55,7 @@ export default function Dashboard() {
   if (error) {
     return (
       <div className="p-4 md:p-6">
-        <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
           <EmptyState
             icon={CircleAlert}
             title="Gagal memuat dashboard"
@@ -76,8 +76,8 @@ export default function Dashboard() {
     <div className="p-4 md:p-6">
       <div className="mb-4 flex items-start justify-between gap-3 md:mb-6">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Dashboard</h2>
-          <p className="mt-1 text-sm text-gray-600">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Dashboard</h2>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
             Ringkasan pengaduan yang masuk melalui AMARA Bot.
           </p>
         </div>
@@ -85,7 +85,7 @@ export default function Dashboard() {
           type="button"
           onClick={muatData}
           disabled={loading}
-          className="flex min-h-[44px] shrink-0 items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-sm font-medium text-gray-600 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex min-h-[44px] shrink-0 items-center gap-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald disabled:cursor-not-allowed disabled:opacity-60"
         >
           <RefreshCw size={16} className={loading ? "animate-spin" : ""} aria-hidden="true" />
           <span className="hidden sm:inline">Muat Ulang</span>
@@ -137,10 +137,10 @@ export default function Dashboard() {
       {/* Dua kolom: notifikasi dan laporan terbaru */}
       <div className="mt-4 grid grid-cols-1 gap-4 md:mt-6 md:gap-6 lg:grid-cols-2">
         {/* Notifikasi Penting */}
-        <section className="rounded-xl border border-gray-200 bg-white shadow-sm">
-          <div className="flex items-center gap-2 border-b border-gray-200 p-4 md:px-5">
+        <section className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
+          <div className="flex items-center gap-2 border-b border-gray-200 dark:border-gray-700 p-4 md:px-5">
             <Bell size={18} className="text-navy" aria-hidden="true" />
-            <h3 className="text-base font-semibold text-gray-900">Notifikasi Penting</h3>
+            <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">Notifikasi Penting</h3>
           </div>
 
           {loading ? (
@@ -159,7 +159,7 @@ export default function Dashboard() {
                       <Ikon size={18} />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm text-gray-900">{n.teks}</p>
+                      <p className="text-sm text-gray-900 dark:text-gray-100">{n.teks}</p>
                       <p className="mt-0.5 text-xs text-gray-400">{formatTanggal(n.waktu)}</p>
                     </div>
                     <Link
@@ -182,11 +182,11 @@ export default function Dashboard() {
         </section>
 
         {/* Laporan Terbaru */}
-        <section className="rounded-xl border border-gray-200 bg-white shadow-sm">
-          <div className="flex items-center justify-between gap-2 border-b border-gray-200 p-4 md:px-5">
+        <section className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
+          <div className="flex items-center justify-between gap-2 border-b border-gray-200 dark:border-gray-700 p-4 md:px-5">
             <div className="flex items-center gap-2">
               <FileText size={18} className="text-navy" aria-hidden="true" />
-              <h3 className="text-base font-semibold text-gray-900">Laporan Terbaru</h3>
+              <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">Laporan Terbaru</h3>
             </div>
             <Link
               to="/pengaduan"
@@ -208,8 +208,8 @@ export default function Dashboard() {
                     className="flex items-start justify-between gap-3 p-4 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-emerald md:px-5"
                   >
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-gray-900">{p.judul}</p>
-                      <p className="mt-0.5 truncate text-xs text-gray-600">
+                      <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">{p.judul}</p>
+                      <p className="mt-0.5 truncate text-xs text-gray-600 dark:text-gray-300">
                         {p.id} · {p.pelapor}
                       </p>
                       <p className="mt-0.5 text-xs text-gray-400">{formatTanggal(p.tanggal)}</p>

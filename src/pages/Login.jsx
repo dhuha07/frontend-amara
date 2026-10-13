@@ -7,7 +7,7 @@ import { useAuth } from "../context/AuthContext";
 import { MODE_TIRUAN, AKUN_CONTOH } from "../services/authService";
 
 const inputKelas =
-  "min-h-[48px] w-full rounded-xl border border-gray-300 bg-white pl-11 text-sm text-gray-900 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald";
+  "min-h-[48px] w-full rounded-xl border border-gray-300 bg-white dark:bg-gray-800 pl-11 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald";
 
 export default function Login() {
   const { masuk } = useAuth();
@@ -45,8 +45,8 @@ export default function Login() {
 
   return (
     <AuthLayout>
-      <h1 className="text-3xl font-extrabold text-gray-900">Login Admin</h1>
-      <p className="mt-1 text-sm text-gray-600">Masuk untuk mengakses panel admin</p>
+      <h1 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100">Login Admin</h1>
+      <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">Masuk untuk mengakses panel admin</p>
 
       <form onSubmit={kirim} noValidate className="mt-6 space-y-5">
         {galat && (
@@ -60,7 +60,7 @@ export default function Login() {
         )}
 
         <div>
-          <label htmlFor="username" className="mb-1.5 block text-sm font-semibold text-gray-900">
+          <label htmlFor="username" className="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-gray-100">
             Username
           </label>
           <div className="relative">
@@ -83,7 +83,7 @@ export default function Login() {
         </div>
 
         <div>
-          <label htmlFor="password" className="mb-1.5 block text-sm font-semibold text-gray-900">
+          <label htmlFor="password" className="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-gray-100">
             Password
           </label>
           <div className="relative">
@@ -105,7 +105,7 @@ export default function Login() {
               type="button"
               onClick={() => setLihat((v) => !v)}
               aria-label={lihat ? "Sembunyikan password" : "Tampilkan password"}
-              className="absolute right-1 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
+              className="absolute right-1 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
             >
               {lihat ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
@@ -151,7 +151,7 @@ export default function Login() {
         )}
       </div>
 
-      <p className="mt-2 text-center text-sm text-gray-600">
+      <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-300">
         Belum punya akun?{" "}
         <Link
           to="/daftar"
@@ -162,8 +162,8 @@ export default function Login() {
       </p>
 
       {MODE_TIRUAN && (
-        <div className="mt-5 rounded-xl border border-dashed border-gray-300 bg-gray-50 p-3 text-xs text-gray-600">
-          <p className="font-semibold text-gray-900">Mode percobaan (tanpa backend)</p>
+        <div className="mt-5 rounded-xl border border-dashed border-gray-300 bg-gray-50 p-3 text-xs text-gray-600 dark:text-gray-300">
+          <p className="font-semibold text-gray-900 dark:text-gray-100">Mode percobaan (tanpa backend)</p>
           <p className="mt-1">
             Username <code className="font-semibold">{AKUN_CONTOH.username}</code>, password{" "}
             <code className="font-semibold">{AKUN_CONTOH.password}</code>
@@ -171,7 +171,7 @@ export default function Login() {
           <button
             type="button"
             onClick={isiContoh}
-            className="mt-2 min-h-[36px] rounded-lg border border-gray-200 bg-white px-3 text-xs font-medium text-gray-600 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
+            className="mt-2 min-h-[36px] rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 text-xs font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
           >
             Isi otomatis
           </button>

@@ -14,8 +14,8 @@ export default function StatCard({ icon: Icon, label, value, trend, color = "nav
     <>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-sm text-gray-600">{label}</p>
-          <p className="mt-1 text-3xl font-bold text-gray-900">{value}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-300">{label}</p>
+          <p className="mt-1 text-3xl font-bold text-gray-900 dark:text-gray-100">{value}</p>
         </div>
         {Icon && (
           <div
@@ -33,7 +33,7 @@ export default function StatCard({ icon: Icon, label, value, trend, color = "nav
     </>
   );
 
-  const kelas = "block rounded-xl border border-gray-200 bg-white p-4 shadow-sm md:p-5";
+  const kelas = "block rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm md:p-5";
 
   if (to) {
     return (

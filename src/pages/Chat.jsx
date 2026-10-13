@@ -267,22 +267,22 @@ export default function Chat() {
   // ---------- Tampilan ----------
   return (
     // Tinggi tepat layar dikurangi header (h-14), tanpa position fixed
-    <div className="flex h-[calc(100dvh-3.5rem)] overflow-hidden border-t border-gray-200 bg-white">
+    <div className="flex h-[calc(100dvh-3.5rem)] overflow-hidden border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
       {/* ===== Panel kiri: daftar kontak ===== */}
       <aside
-        className={`${aktifId ? "hidden md:flex" : "flex"} min-h-0 w-full shrink-0 flex-col border-r border-gray-200 bg-white md:w-80`}
+        className={`${aktifId ? "hidden md:flex" : "flex"} min-h-0 w-full shrink-0 flex-col border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 md:w-80`}
         aria-label="Daftar percakapan"
       >
-        <div className="shrink-0 space-y-3 border-b border-gray-200 p-4">
+        <div className="shrink-0 space-y-3 border-b border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center justify-between gap-2">
-            <h2 className="text-lg font-bold text-gray-900">Riwayat Percakapan</h2>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Riwayat Percakapan</h2>
             <button
               type="button"
               onClick={() => muatKontak()}
               disabled={loadingKontak}
               aria-label="Muat ulang daftar percakapan"
               title="Muat ulang"
-              className="flex h-11 w-11 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald disabled:opacity-50 md:h-9 md:w-9"
+              className="flex h-11 w-11 items-center justify-center rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald disabled:opacity-50 md:h-9 md:w-9"
             >
               <RefreshCw size={16} className={loadingKontak ? "animate-spin" : ""} />
             </button>
@@ -299,7 +299,7 @@ export default function Chat() {
               onChange={(e) => setCari(e.target.value)}
               placeholder="Cari nama atau nomor"
               aria-label="Cari percakapan"
-              className="min-h-[44px] w-full rounded-lg border border-gray-200 bg-white pl-9 pr-3 text-sm text-gray-900 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
+              className="min-h-[44px] w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 pl-9 pr-3 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
             />
           </div>
         </div>
@@ -342,7 +342,7 @@ export default function Chat() {
                     <Avatar nama={k.nama} online={k.online} />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-baseline justify-between gap-2">
-                        <p className="truncate text-sm font-semibold text-gray-900">{k.nama}</p>
+                        <p className="truncate text-sm font-semibold text-gray-900 dark:text-gray-100">{k.nama}</p>
                         <span
                           className={`shrink-0 text-xs ${
                             k.belumDibaca > 0 ? "font-semibold text-emerald-800" : "text-gray-400"
@@ -352,7 +352,7 @@ export default function Chat() {
                         </span>
                       </div>
                       <div className="mt-0.5 flex items-center justify-between gap-2">
-                        <p className="truncate text-xs text-gray-600">{k.pesanTerakhir}</p>
+                        <p className="truncate text-xs text-gray-600 dark:text-gray-300">{k.pesanTerakhir}</p>
                         {k.belumDibaca > 0 && (
                           <span
                             className="flex h-5 min-w-[20px] shrink-0 items-center justify-center rounded-full bg-emerald px-1.5 text-[11px] font-bold text-white"
@@ -378,30 +378,30 @@ export default function Chat() {
       >
         {!kontakAktif ? (
           <div className="flex flex-1 flex-col items-center justify-center bg-[#efeae2] px-6 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-gray-400 shadow-sm">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white dark:bg-gray-800 text-gray-400 shadow-sm">
               <MessageCircle size={30} aria-hidden="true" />
             </div>
-            <h3 className="mt-4 text-base font-semibold text-gray-900">Pilih percakapan</h3>
-            <p className="mt-1 max-w-xs text-sm text-gray-600">
+            <h3 className="mt-4 text-base font-semibold text-gray-900 dark:text-gray-100">Pilih percakapan</h3>
+            <p className="mt-1 max-w-xs text-sm text-gray-600 dark:text-gray-300">
               Pilih kontak di sebelah kiri untuk membaca riwayat dan membalas pesan pelapor.
             </p>
           </div>
         ) : (
           <>
             {/* Header chat */}
-            <div className="flex shrink-0 items-center gap-3 border-b border-gray-200 bg-white px-3 py-2 md:px-4">
+            <div className="flex shrink-0 items-center gap-3 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 md:px-4">
               <button
                 type="button"
                 onClick={tutupChat}
                 aria-label="Kembali ke daftar percakapan"
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald md:hidden"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald md:hidden"
               >
                 <ArrowLeft size={20} />
               </button>
               <Avatar nama={kontakAktif.nama} online={kontakAktif.online} ukuran="h-10 w-10" />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold text-gray-900">{kontakAktif.nama}</p>
-                <p className="truncate text-xs text-gray-600">
+                <p className="truncate text-sm font-semibold text-gray-900 dark:text-gray-100">{kontakAktif.nama}</p>
+                <p className="truncate text-xs text-gray-600 dark:text-gray-300">
                   {sedangMengetik ? (
                     <span className="font-medium text-emerald-800">sedang mengetik...</span>
                   ) : (
@@ -417,7 +417,7 @@ export default function Chat() {
                 rel="noopener noreferrer"
                 aria-label="Buka percakapan di WhatsApp"
                 title="Buka di WhatsApp"
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
               >
                 <MessageCircle size={20} />
               </a>
@@ -454,7 +454,7 @@ export default function Chat() {
                       <div key={m.id}>
                         {tampilPemisah && (
                           <div className="my-3 flex justify-center">
-                            <span className="rounded-lg bg-white/90 px-3 py-1 text-xs font-medium text-gray-600 shadow-sm">
+                            <span className="rounded-lg bg-white dark:bg-gray-800/90 px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-300 shadow-sm">
                               {hari}
                             </span>
                           </div>
@@ -462,7 +462,7 @@ export default function Chat() {
                         <div className={`flex ${dariPelapor ? "justify-start" : "justify-end"}`}>
                           <div
                             className={`max-w-[85%] rounded-lg px-3 py-2 shadow-sm md:max-w-[70%] ${
-                              dariPelapor ? "bg-white" : "bg-[#dcf8c6]"
+                              dariPelapor ? "bg-white dark:bg-gray-800" : "bg-[#dcf8c6]"
                             }`}
                           >
                             {m.pengirim === "bot" && (
@@ -471,7 +471,7 @@ export default function Chat() {
                                 AMARA Bot
                               </p>
                             )}
-                            <p className="whitespace-pre-wrap break-words text-sm text-gray-900">
+                            <p className="whitespace-pre-wrap break-words text-sm text-gray-900 dark:text-gray-100">
                               {m.teks}
                             </p>
                             <div className="mt-1 flex items-center justify-end gap-1">
@@ -496,7 +496,7 @@ export default function Chat() {
 
                   {sedangMengetik && (
                     <div className="flex justify-start">
-                      <div className="rounded-lg bg-white px-3 py-2 text-sm italic text-gray-600 shadow-sm">
+                      <div className="rounded-lg bg-white dark:bg-gray-800 px-3 py-2 text-sm italic text-gray-600 dark:text-gray-300 shadow-sm">
                         sedang mengetik...
                       </div>
                     </div>
@@ -506,7 +506,7 @@ export default function Chat() {
             </div>
 
             {/* Kolom ketik: menempel di bawah, aman dari keyboard dan area aman HP */}
-            <div className="sticky bottom-0 shrink-0 border-t border-gray-200 bg-gray-100 px-3 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:px-4">
+            <div className="sticky bottom-0 shrink-0 border-t border-gray-200 dark:border-gray-700 bg-gray-100 px-3 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:px-4">
               <div className="flex items-end gap-2">
                 <textarea
                   ref={inputRef}
@@ -516,7 +516,7 @@ export default function Chat() {
                   rows={1}
                   placeholder="Tulis balasan untuk pelapor"
                   aria-label="Tulis pesan"
-                  className="min-h-[44px] w-full resize-none rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
+                  className="min-h-[44px] w-full resize-none rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2.5 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
                 />
                 <button
                   type="button"

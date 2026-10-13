@@ -115,7 +115,7 @@ export default function Topbar({ onMenuClick, onToggleCollapse, collapsed = fals
         type="button"
         onClick={onMenuClick}
         aria-label="Buka menu"
-        className="flex h-11 w-11 items-center justify-center rounded-lg hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald md:hidden"
+        className="flex h-11 w-11 items-center justify-center rounded-lg hover:bg-white dark:bg-gray-800/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald md:hidden"
       >
         <Menu size={22} />
       </button>
@@ -126,7 +126,7 @@ export default function Topbar({ onMenuClick, onToggleCollapse, collapsed = fals
         onClick={onToggleCollapse}
         aria-label={collapsed ? "Bentangkan menu samping" : "Lipat menu samping"}
         title={collapsed ? "Bentangkan menu" : "Lipat menu"}
-        className="hidden h-11 w-11 items-center justify-center rounded-lg hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald lg:flex"
+        className="hidden h-11 w-11 items-center justify-center rounded-lg hover:bg-white dark:bg-gray-800/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald lg:flex"
       >
         <IkonLipat size={22} />
       </button>
@@ -145,9 +145,9 @@ export default function Topbar({ onMenuClick, onToggleCollapse, collapsed = fals
           onClick={toggleDarkMode}
           aria-label="Ubah tema gelap atau terang"
           title={isDark ? "Beralih ke Terang" : "Beralih ke Gelap"}
-          className={`relative inline-flex h-[30px] w-[56px] shrink-0 items-center rounded-full p-1 transition-colors duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald focus-visible:ring-offset-2 focus-visible:ring-offset-navy ${isDark ? "bg-emerald" : "bg-white/20"}`}
+          className={`relative inline-flex h-[30px] w-[56px] shrink-0 items-center rounded-full p-1 transition-colors duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald focus-visible:ring-offset-2 focus-visible:ring-offset-navy ${isDark ? "bg-emerald" : "bg-white dark:bg-gray-800/20"}`}
         >
-          <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-lg transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] will-change-transform ${isDark ? "translate-x-[26px]" : "translate-x-0"}`}>
+          <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full bg-white dark:bg-gray-800 shadow-lg transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] will-change-transform ${isDark ? "translate-x-[26px]" : "translate-x-0"}`}>
             {isDark ? <Sun size={14} className="text-amber-500" /> : <Moon size={14} className="text-navy" />}
           </span>
         </button>
@@ -161,7 +161,7 @@ export default function Topbar({ onMenuClick, onToggleCollapse, collapsed = fals
             }}
             aria-label={`Notifikasi, ${belumDibaca} belum dibaca`}
             aria-expanded={terbuka}
-            className="relative flex h-11 w-11 items-center justify-center rounded-lg hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
+            className="relative flex h-11 w-11 items-center justify-center rounded-lg hover:bg-white dark:bg-gray-800/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
           >
             <Bell size={20} />
             {belumDibaca > 0 && (
@@ -172,8 +172,8 @@ export default function Topbar({ onMenuClick, onToggleCollapse, collapsed = fals
           </button>
 
           {terbuka && (
-            <div className="absolute right-0 top-full z-50 mt-2 w-80 max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-gray-200 bg-white text-gray-900 shadow-lg">
-              <div className="flex items-center justify-between gap-2 border-b border-gray-200 px-4 py-3">
+            <div className="absolute right-0 top-full z-50 mt-2 w-80 max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-lg">
+              <div className="flex items-center justify-between gap-2 border-b border-gray-200 dark:border-gray-700 px-4 py-3">
                 <h2 className="text-sm font-semibold">Notifikasi</h2>
                 <button
                   type="button"
@@ -187,7 +187,7 @@ export default function Topbar({ onMenuClick, onToggleCollapse, collapsed = fals
               </div>
 
               {notif.length === 0 ? (
-                <p className="px-4 py-8 text-center text-sm text-gray-600">
+                <p className="px-4 py-8 text-center text-sm text-gray-600 dark:text-gray-300">
                   Belum ada notifikasi.
                 </p>
               ) : (
@@ -210,7 +210,7 @@ export default function Topbar({ onMenuClick, onToggleCollapse, collapsed = fals
                             aria-hidden="true"
                           />
                           <div className="min-w-0">
-                            <p className="text-sm text-gray-900">{n.teks}</p>
+                            <p className="text-sm text-gray-900 dark:text-gray-100">{n.teks}</p>
                             <p className="mt-0.5 text-xs text-gray-400">
                               {formatTanggal(n.waktu)}
                             </p>
@@ -235,7 +235,7 @@ export default function Topbar({ onMenuClick, onToggleCollapse, collapsed = fals
             }}
             aria-label={`Menu akun ${namaTampil}`}
             aria-expanded={menuAkun}
-            className="flex min-h-[44px] items-center gap-2 rounded-lg px-1.5 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
+            className="flex min-h-[44px] items-center gap-2 rounded-lg px-1.5 hover:bg-white dark:bg-gray-800/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
           >
             <span
               className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald text-sm font-bold"
@@ -249,10 +249,10 @@ export default function Topbar({ onMenuClick, onToggleCollapse, collapsed = fals
           </button>
 
           {menuAkun && (
-            <div className="absolute right-0 top-full z-50 mt-2 w-64 max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-gray-200 bg-white text-gray-900 shadow-lg">
-              <div className="border-b border-gray-200 px-4 py-3">
+            <div className="absolute right-0 top-full z-50 mt-2 w-64 max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-lg">
+              <div className="border-b border-gray-200 dark:border-gray-700 px-4 py-3">
                 <p className="truncate text-sm font-semibold">{namaTampil}</p>
-                <p className="truncate text-xs text-gray-600">{pengguna?.email}</p>
+                <p className="truncate text-xs text-gray-600 dark:text-gray-300">{pengguna?.email}</p>
                 <span className="mt-2 inline-block rounded-full bg-blue-100 px-2.5 py-1 text-xs font-medium text-navy">
                   {pengguna?.peran || "Admin"}
                 </span>

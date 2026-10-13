@@ -6,7 +6,7 @@ export default function Skeleton({ className = "" }) {
 // Kerangka kartu KPI
 export function SkeletonCard() {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm md:p-5">
+    <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm md:p-5">
       <Skeleton className="h-4 w-24" />
       <Skeleton className="mt-3 h-8 w-16" />
       <Skeleton className="mt-4 h-3 w-32" />

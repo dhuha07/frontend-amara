@@ -23,7 +23,7 @@ import {
 } from "../utils/constants";
 
 const selectKelas =
-  "min-h-[44px] w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald";
+  "min-h-[44px] w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 text-sm text-gray-900 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald";
 
 export default function Pengaduan() {
   // Filter status, kategori, dan prioritas disimpan di alamat (?status=Darurat)
@@ -108,7 +108,7 @@ export default function Pengaduan() {
   if (error) {
     return (
       <div className="p-4 md:p-6">
-        <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
           <EmptyState
             icon={CircleAlert}
             title="Gagal memuat daftar pengaduan"
@@ -125,8 +125,8 @@ export default function Pengaduan() {
     <div className="p-4 md:p-6">
       <div className="mb-4 flex items-start justify-between gap-3 md:mb-6">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Daftar Pengaduan</h2>
-          <p className="mt-1 text-sm text-gray-600">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Daftar Pengaduan</h2>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
             Kelola laporan yang masuk melalui AMARA Bot.
           </p>
         </div>
@@ -134,16 +134,16 @@ export default function Pengaduan() {
           type="button"
           onClick={muatData}
           disabled={loading}
-          className="flex min-h-[44px] shrink-0 items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-sm font-medium text-gray-600 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex min-h-[44px] shrink-0 items-center gap-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald disabled:cursor-not-allowed disabled:opacity-60"
         >
           <RefreshCw size={16} className={loading ? "animate-spin" : ""} aria-hidden="true" />
           <span className="hidden sm:inline">Muat Ulang</span>
         </button>
       </div>
 
-      <section className="rounded-xl border border-gray-200 bg-white shadow-sm">
+      <section className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
         {/* Pencarian dan filter */}
-        <div className="space-y-3 border-b border-gray-200 p-4 md:p-5">
+        <div className="space-y-3 border-b border-gray-200 dark:border-gray-700 p-4 md:p-5">
           <div className="relative">
             <Search
               size={18}
@@ -156,7 +156,7 @@ export default function Pengaduan() {
               onChange={(e) => setCari(e.target.value)}
               placeholder="Cari judul, nama pelapor, atau ID pengaduan"
               aria-label="Cari pengaduan"
-              className="min-h-[44px] w-full rounded-lg border border-gray-200 bg-white pl-10 pr-3 text-sm text-gray-900 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
+              className="min-h-[44px] w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 pl-10 pr-3 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
             />
           </div>
 
@@ -201,7 +201,7 @@ export default function Pengaduan() {
               type="button"
               onClick={resetFilter}
               disabled={!adaFilter}
-              className="flex min-h-[44px] items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-sm font-medium text-gray-600 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex min-h-[44px] items-center justify-center gap-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald disabled:cursor-not-allowed disabled:opacity-40"
             >
               <RotateCcw size={16} aria-hidden="true" />
               Reset Filter
@@ -224,7 +224,7 @@ export default function Pengaduan() {
           <>
             <div className="overflow-x-auto w-full">
               <table className="w-full min-w-[800px] text-left text-sm">
-                <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-600">
+                <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-600 dark:text-gray-300">
                   <tr>
                     <th scope="col" className="px-4 py-3 font-semibold md:px-5">ID</th>
                     <th scope="col" className="px-4 py-3 font-semibold">Pelapor</th>
@@ -239,7 +239,7 @@ export default function Pengaduan() {
                         type="button"
                         onClick={() => setTerbaruDulu((v) => !v)}
                         title={terbaruDulu ? "Urut dari terbaru" : "Urut dari terlama"}
-                        className="flex items-center gap-1 rounded uppercase tracking-wide hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
+                        className="flex items-center gap-1 rounded uppercase tracking-wide hover:text-gray-900 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
                       >
                         Tanggal
                         <ArrowUpDown size={14} aria-hidden="true" />
@@ -253,15 +253,15 @@ export default function Pengaduan() {
                 <tbody className="divide-y divide-gray-100">
                   {baris.map((p) => (
                     <tr key={p.id} className="hover:bg-gray-50">
-                      <td className="whitespace-nowrap px-4 py-3 font-medium text-gray-900 md:px-5">
+                      <td className="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-gray-100 md:px-5">
                         {p.id}
                       </td>
-                      <td className="px-4 py-3 text-gray-600">{p.pelapor}</td>
-                      <td className="px-4 py-3 text-gray-600">{p.kategori}</td>
-                      <td className="max-w-[260px] px-4 py-3 text-gray-900">
+                      <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{p.pelapor}</td>
+                      <td className="px-4 py-3 text-gray-600 dark:text-gray-300">{p.kategori}</td>
+                      <td className="max-w-[260px] px-4 py-3 text-gray-900 dark:text-gray-100">
                         <p className="line-clamp-2">{p.judul}</p>
                       </td>
-                      <td className="whitespace-nowrap px-4 py-3 text-gray-600">
+                      <td className="whitespace-nowrap px-4 py-3 text-gray-600 dark:text-gray-300">
                         {formatTanggalSingkat(p.tanggal)}
                       </td>
                       <td className="px-4 py-3">

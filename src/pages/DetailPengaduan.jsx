@@ -22,15 +22,15 @@ import { fetchPengaduanById, updatePengaduan } from "../services/pengaduanServic
 import { formatTanggal } from "../utils/formatDate";
 import { STATUS_LIST, PRIORITAS_LIST } from "../utils/constants";
 
-const kartu = "rounded-xl border border-gray-200 bg-white p-4 shadow-sm md:p-5";
+const kartu = "rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm md:p-5";
 const inputKelas =
-  "min-h-[44px] w-full rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald";
+  "min-h-[44px] w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 text-sm text-gray-900 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald";
 
 function Judul({ icon: Icon, children }) {
   return (
     <div className="mb-3 flex items-center gap-2">
       <Icon size={18} className="text-navy" aria-hidden="true" />
-      <h3 className="text-base font-semibold text-gray-900">{children}</h3>
+      <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">{children}</h3>
     </div>
   );
 }
@@ -115,7 +115,7 @@ export default function DetailPengaduan() {
   if (error) {
     return (
       <div className="p-4 md:p-6">
-        <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
           <EmptyState
             icon={CircleAlert}
             title="Gagal memuat detail pengaduan"
@@ -131,7 +131,7 @@ export default function DetailPengaduan() {
   if (!item) {
     return (
       <div className="p-4 md:p-6">
-        <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
           <EmptyState
             icon={FileX}
             title="Pengaduan tidak ditemukan"
@@ -153,12 +153,12 @@ export default function DetailPengaduan() {
   return (
     <div className="p-4 md:p-6">
       {/* Remah roti */}
-      <nav aria-label="Jejak halaman" className="mb-3 flex flex-wrap items-center gap-1 text-sm text-gray-600">
+      <nav aria-label="Jejak halaman" className="mb-3 flex flex-wrap items-center gap-1 text-sm text-gray-600 dark:text-gray-300">
         <Link to="/" className="hover:underline">Dashboard</Link>
         <ChevronRight size={14} aria-hidden="true" />
         <Link to="/pengaduan" className="hover:underline">Daftar Pengaduan</Link>
         <ChevronRight size={14} aria-hidden="true" />
-        <span className="font-medium text-gray-900">{item.id}</span>
+        <span className="font-medium text-gray-900 dark:text-gray-100">{item.id}</span>
       </nav>
 
       <div className="mb-4 flex flex-wrap items-start justify-between gap-3 md:mb-6">
@@ -166,13 +166,13 @@ export default function DetailPengaduan() {
           <Link
             to="/pengaduan"
             aria-label="Kembali ke daftar pengaduan"
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
           >
             <ArrowLeft size={18} />
           </Link>
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Detail Pengaduan</h2>
-            <p className="mt-1 text-sm text-gray-600">{item.id}</p>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Detail Pengaduan</h2>
+            <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">{item.id}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -189,26 +189,26 @@ export default function DetailPengaduan() {
             <dl className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
               <div>
                 <dt className="text-gray-400">Nama</dt>
-                <dd className="font-medium text-gray-900">{item.pelapor}</dd>
+                <dd className="font-medium text-gray-900 dark:text-gray-100">{item.pelapor}</dd>
               </div>
               <div>
                 <dt className="text-gray-400">Nomor WhatsApp</dt>
-                <dd className="font-medium text-gray-900">{item.noWa}</dd>
+                <dd className="font-medium text-gray-900 dark:text-gray-100">{item.noWa}</dd>
               </div>
               <div>
                 <dt className="text-gray-400">Kategori</dt>
-                <dd className="font-medium text-gray-900">{item.kategori}</dd>
+                <dd className="font-medium text-gray-900 dark:text-gray-100">{item.kategori}</dd>
               </div>
               <div>
                 <dt className="text-gray-400">Tanggal Laporan</dt>
-                <dd className="font-medium text-gray-900">{formatTanggal(item.tanggal)}</dd>
+                <dd className="font-medium text-gray-900 dark:text-gray-100">{formatTanggal(item.tanggal)}</dd>
               </div>
             </dl>
             <a
               href={linkWa}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-flex min-h-[44px] items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-sm font-medium text-gray-600 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
+              className="mt-4 inline-flex min-h-[44px] items-center gap-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
             >
               <MessageCircle size={16} aria-hidden="true" />
               Buka di WhatsApp
@@ -217,18 +217,18 @@ export default function DetailPengaduan() {
 
           <section className={kartu}>
             <Judul icon={FileText}>Isi Pengaduan</Judul>
-            <p className="text-sm font-semibold text-gray-900">{item.judul}</p>
-            <p className="mt-2 text-sm leading-relaxed text-gray-600">{item.deskripsi}</p>
+            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">{item.judul}</p>
+            <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-300">{item.deskripsi}</p>
           </section>
 
           <section className={kartu}>
             <Judul icon={MapPin}>Lokasi</Judul>
-            <p className="text-sm text-gray-900">{item.lokasi}</p>
+            <p className="text-sm text-gray-900 dark:text-gray-100">{item.lokasi}</p>
           </section>
 
           <section className={kartu}>
             <Judul icon={History}>Riwayat Status</Judul>
-            <ol className="relative ml-2 space-y-5 border-l-2 border-gray-200 pl-5">
+            <ol className="relative ml-2 space-y-5 border-l-2 border-gray-200 dark:border-gray-700 pl-5">
               {[...item.riwayatStatus].reverse().map((r, i) => (
                 <li key={`${r.waktu}-${i}`} className="relative">
                   <span
@@ -239,7 +239,7 @@ export default function DetailPengaduan() {
                     <StatusBadge status={r.status} />
                     <span className="text-xs text-gray-400">{formatTanggal(r.waktu)}</span>
                   </div>
-                  <p className="mt-1 text-sm text-gray-600">{r.catatan}</p>
+                  <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">{r.catatan}</p>
                 </li>
               ))}
             </ol>
@@ -253,7 +253,7 @@ export default function DetailPengaduan() {
 
             <div className="space-y-4">
               <div>
-                <label htmlFor="status" className="mb-1 block text-sm font-medium text-gray-900">
+                <label htmlFor="status" className="mb-1 block text-sm font-medium text-gray-900 dark:text-gray-100">
                   Status
                 </label>
                 <select
@@ -269,7 +269,7 @@ export default function DetailPengaduan() {
               </div>
 
               <div>
-                <label htmlFor="prioritas" className="mb-1 block text-sm font-medium text-gray-900">
+                <label htmlFor="prioritas" className="mb-1 block text-sm font-medium text-gray-900 dark:text-gray-100">
                   Prioritas
                 </label>
                 <select
@@ -285,7 +285,7 @@ export default function DetailPengaduan() {
               </div>
 
               <div>
-                <label htmlFor="catatan" className="mb-1 block text-sm font-medium text-gray-900">
+                <label htmlFor="catatan" className="mb-1 block text-sm font-medium text-gray-900 dark:text-gray-100">
                   Catatan Internal
                 </label>
                 <textarea
@@ -294,7 +294,7 @@ export default function DetailPengaduan() {
                   onChange={(e) => setCatatan(e.target.value)}
                   rows={4}
                   placeholder="Tulis catatan tindak lanjut (opsional)"
-                  className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
+                  className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
                 />
               </div>
 

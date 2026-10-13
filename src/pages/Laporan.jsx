@@ -28,7 +28,7 @@ import { fetchLaporan } from "../services/laporanService";
 import { RENTANG } from "../data/laporanData";
 import { CHART_COLORS } from "../utils/constants";
 
-const kartu = "rounded-xl border border-gray-200 bg-white p-4 shadow-sm md:p-5";
+const kartu = "rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm md:p-5";
 
 // Bungkus nilai CSV agar aman dari koma dan tanda kutip
 const sel = (v) => `"${String(v).replace(/"/g, '""')}"`;
@@ -114,7 +114,7 @@ export default function Laporan() {
   if (error) {
     return (
       <div className="p-4 md:p-6">
-        <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
           <EmptyState
             icon={CircleAlert}
             title="Gagal memuat laporan"
@@ -136,8 +136,8 @@ export default function Laporan() {
     <div className="p-4 md:p-6">
       <div className="mb-4 flex flex-wrap items-start justify-between gap-3 md:mb-6">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Laporan</h2>
-          <p className="mt-1 text-sm text-gray-600">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Laporan</h2>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
             Analisis pengaduan yang masuk melalui AMARA Bot.
           </p>
         </div>
@@ -147,20 +147,20 @@ export default function Laporan() {
             type="date"
             value={tglMulai}
             onChange={(e) => setTglMulai(e.target.value)}
-            className="min-h-[44px] rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900"
+            className="min-h-[44px] rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 text-sm text-gray-900 dark:text-gray-100"
           />
           <span className="text-sm text-gray-500">s.d.</span>
           <input
             type="date"
             value={tglSelesai}
             onChange={(e) => setTglSelesai(e.target.value)}
-            className="min-h-[44px] rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900"
+            className="min-h-[44px] rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 text-sm text-gray-900 dark:text-gray-100"
           />
 
           <button
             type="button"
             onClick={muatData}
-            className="flex h-11 w-11 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
+            className="flex h-11 w-11 items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50"
           >
             <RefreshCw size={16} />
           </button>
@@ -218,7 +218,7 @@ export default function Laporan() {
       <div className="mt-4 grid grid-cols-1 gap-4 md:mt-6 md:gap-6 lg:grid-cols-5">
         {/* Grafik batang */}
         <section className={`${kartu} lg:col-span-3`}>
-          <h3 className="text-base font-semibold text-gray-900">
+          <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">
             {data ? data.judulGrafik : "Jumlah Pengaduan"}
           </h3>
           <p className="mt-0.5 text-xs text-gray-400">Jumlah laporan yang masuk pada tiap periode</p>
@@ -228,7 +228,7 @@ export default function Laporan() {
           ) : data.perPeriode.length === 0 ? (
             <div className="flex h-72 items-center justify-center rounded-lg border-2 border-dashed border-gray-100 bg-gray-50/50">
                <div className="text-center">
-                  <p className="text-sm font-medium text-gray-900">Maaf, data tidak tersedia</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Maaf, data tidak tersedia</p>
                   <p className="text-xs text-gray-500">Tidak ada pengaduan pada rentang tanggal ini.</p>
                </div>
             </div>
@@ -255,7 +255,7 @@ export default function Laporan() {
 
         {/* Grafik lingkaran */}
         <section className={`${kartu} lg:col-span-2`}>
-          <h3 className="text-base font-semibold text-gray-900">Pengaduan per Kategori</h3>
+          <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">Pengaduan per Kategori</h3>
           <p className="mt-0.5 text-xs text-gray-400">Sebaran laporan berdasarkan bidang layanan</p>
 
           {loading || !data ? (
@@ -296,9 +296,9 @@ export default function Laporan() {
                         style={{ backgroundColor: CHART_COLORS[i % CHART_COLORS.length] }}
                         aria-hidden="true"
                       />
-                      <span className="truncate text-gray-600">{k.nama}</span>
+                      <span className="truncate text-gray-600 dark:text-gray-300">{k.nama}</span>
                     </span>
-                    <span className="shrink-0 font-medium text-gray-900">
+                    <span className="shrink-0 font-medium text-gray-900 dark:text-gray-100">
                       {k.jumlah}{" "}
                       <span className="font-normal text-gray-400">
                         ({totalKategori > 0 ? Math.round((k.jumlah / totalKategori) * 100) : 0}%)

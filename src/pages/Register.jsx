@@ -8,13 +8,13 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const USERNAME_REGEX = /^[A-Za-z0-9_]{4,20}$/;
 
 const inputKelas =
-  "min-h-[48px] w-full rounded-xl border bg-white pl-11 text-sm text-gray-900 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald";
+  "min-h-[48px] w-full rounded-xl border bg-white dark:bg-gray-800 pl-11 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald";
 
 // Satu kolom isian dengan ikon dan pesan galat
 function Kolom({ id, label, icon: Icon, galat, children }) {
   return (
     <div>
-      <label htmlFor={id} className="mb-1.5 block text-sm font-semibold text-gray-900">
+      <label htmlFor={id} className="mb-1.5 block text-sm font-semibold text-gray-900 dark:text-gray-100">
         {label}
       </label>
       <div className="relative">
@@ -91,8 +91,8 @@ export default function Register() {
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-800">
             <BadgeCheck size={32} aria-hidden="true" />
           </div>
-          <h1 className="mt-4 text-2xl font-extrabold text-gray-900">Pendaftaran Berhasil</h1>
-          <p className="mt-2 text-sm text-gray-600">
+          <h1 className="mt-4 text-2xl font-extrabold text-gray-900 dark:text-gray-100">Pendaftaran Berhasil</h1>
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
             Akun Anda menunggu persetujuan Super Admin. Anda baru bisa masuk setelah akun diaktifkan.
           </p>
           <Link
@@ -108,8 +108,8 @@ export default function Register() {
 
   return (
     <AuthLayout>
-      <h1 className="text-3xl font-extrabold text-gray-900">Daftar Akun</h1>
-      <p className="mt-1 text-sm text-gray-600">
+      <h1 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100">Daftar Akun</h1>
+      <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
         Akun baru perlu disetujui Super Admin sebelum dapat digunakan
       </p>
 
@@ -179,7 +179,7 @@ export default function Register() {
             type="button"
             onClick={() => setLihat((v) => !v)}
             aria-label={lihat ? "Sembunyikan password" : "Tampilkan password"}
-            className="absolute right-1 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
+            className="absolute right-1 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald"
           >
             {lihat ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
@@ -214,7 +214,7 @@ export default function Register() {
         </button>
       </form>
 
-      <p className="mt-5 text-center text-sm text-gray-600">
+      <p className="mt-5 text-center text-sm text-gray-600 dark:text-gray-300">
         Sudah punya akun?{" "}
         <Link
           to="/masuk"

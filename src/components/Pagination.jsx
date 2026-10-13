@@ -22,8 +22,8 @@ export default function Pagination({ page, totalItems, perPage = 10, onPageChang
     "flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald md:min-h-[36px] md:min-w-[36px]";
 
   return (
-    <div className="flex flex-col items-center justify-between gap-3 border-t border-gray-200 px-4 py-3 sm:flex-row md:px-5">
-      <p className="text-sm text-gray-600">
+    <div className="flex flex-col items-center justify-between gap-3 border-t border-gray-200 dark:border-gray-700 px-4 py-3 sm:flex-row md:px-5">
+      <p className="text-sm text-gray-600 dark:text-gray-300">
         Menampilkan {dari}-{sampai} dari {totalItems} data
       </p>
 
@@ -33,7 +33,7 @@ export default function Pagination({ page, totalItems, perPage = 10, onPageChang
           onClick={() => onPageChange(page - 1)}
           disabled={page <= 1}
           aria-label="Halaman sebelumnya"
-          className={`${tombol} border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40`}
+          className={`${tombol} border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40`}
         >
           <ChevronLeft size={18} />
         </button>
@@ -47,7 +47,7 @@ export default function Pagination({ page, totalItems, perPage = 10, onPageChang
             className={`${tombol} ${
               n === page
                 ? "border-emerald bg-emerald text-white"
-                : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
+                : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50"
             }`}
           >
             {n}
@@ -59,7 +59,7 @@ export default function Pagination({ page, totalItems, perPage = 10, onPageChang
           onClick={() => onPageChange(page + 1)}
           disabled={page >= totalPages}
           aria-label="Halaman berikutnya"
-          className={`${tombol} border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40`}
+          className={`${tombol} border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40`}
         >
           <ChevronRight size={18} />
         </button>

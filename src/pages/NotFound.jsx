@@ -6,7 +6,7 @@ export default function NotFound() {
   const navigate = useNavigate();
   return (
     <div className="p-4 md:p-6">
-      <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
         <EmptyState
           icon={SearchX}
           title="Halaman tidak ditemukan"

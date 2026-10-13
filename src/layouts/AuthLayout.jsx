@@ -8,7 +8,7 @@ export default function AuthLayout({ children }) {
   const [ilustrasiGagal, setIlustrasiGagal] = useState(false);
 
   return (
-    <div className="min-h-dvh bg-white p-3 lg:p-5">
+    <div className="min-h-dvh bg-white dark:bg-gray-800 p-3 lg:p-5">
       <div className="flex min-h-[calc(100dvh-1.5rem)] w-full flex-col overflow-hidden rounded-3xl bg-gray-200 lg:min-h-[calc(100dvh-2.5rem)] lg:flex-row">
         {/* Panel kiri */}
         <aside className="relative flex flex-col rounded-3xl bg-gradient-to-b from-navy via-[#1b5a78] to-[#18a34e] px-6 py-6 text-white lg:w-[42%] lg:max-w-[640px] lg:px-10 lg:py-10 xl:px-14">
@@ -21,7 +21,7 @@ export default function AuthLayout({ children }) {
             */}
             <div className="flex h-16 w-16 shrink-0 items-center justify-center lg:h-24 lg:w-24">
               {logoGagal ? (
-                <div className="flex h-full w-full items-center justify-center rounded-lg bg-white/15">
+                <div className="flex h-full w-full items-center justify-center rounded-lg bg-white dark:bg-gray-800/15">
                   <ShieldCheck size={32} aria-hidden="true" />
                 </div>
               ) : (
@@ -59,8 +59,8 @@ export default function AuthLayout({ children }) {
                 className="max-h-[360px] w-auto object-contain xl:max-h-[420px]"
               />
             ) : (
-              <div className="flex h-64 w-64 items-center justify-center rounded-full bg-white/10">
-                <div className="flex h-44 w-44 items-center justify-center rounded-full bg-white/10">
+              <div className="flex h-64 w-64 items-center justify-center rounded-full bg-white dark:bg-gray-800/10">
+                <div className="flex h-44 w-44 items-center justify-center rounded-full bg-white dark:bg-gray-800/10">
                   <HeartHandshake size={72} aria-hidden="true" />
                 </div>
               </div>
@@ -75,11 +75,11 @@ export default function AuthLayout({ children }) {
         {/* Panel kanan */}
         <div className="flex flex-1 flex-col">
           <main className="flex flex-1 items-center justify-center px-0 py-4 lg:px-10 lg:py-10">
-            <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-sm md:p-8 lg:max-w-lg lg:p-10">
+            <div className="w-full max-w-md rounded-3xl bg-white dark:bg-gray-800 p-6 shadow-sm md:p-8 lg:max-w-lg lg:p-10">
               {children}
             </div>
           </main>
-          <p className="pb-4 text-center text-xs text-gray-600 lg:hidden">
+          <p className="pb-4 text-center text-xs text-gray-600 dark:text-gray-300 lg:hidden">
             © {new Date().getFullYear()} DPMP4KB Kota Magelang
           </p>
         </div>
