@@ -139,15 +139,17 @@ export default function Topbar({ onMenuClick, onToggleCollapse, collapsed = fals
       </h1>
 
       <div className="ml-auto flex items-center gap-2 sm:gap-3">
-        {/* Tombol Dark Mode */}
+        {/* Switch Dark Mode iPhone style */}
         <button
           type="button"
           onClick={toggleDarkMode}
           aria-label="Ubah tema gelap atau terang"
           title={isDark ? "Beralih ke Terang" : "Beralih ke Gelap"}
-          className="flex h-11 w-11 items-center justify-center rounded-lg hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald transition-transform active:scale-90"
+          className={`relative inline-flex h-[30px] w-[56px] shrink-0 items-center rounded-full p-1 transition-colors duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald focus-visible:ring-offset-2 focus-visible:ring-offset-navy ${isDark ? "bg-emerald" : "bg-white/20"}`}
         >
-          {isDark ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} />}
+          <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-lg transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] will-change-transform ${isDark ? "translate-x-[26px]" : "translate-x-0"}`}>
+            {isDark ? <Sun size={14} className="text-amber-500" /> : <Moon size={14} className="text-navy" />}
+          </span>
         </button>
         {/* Lonceng notifikasi */}
         <div className="relative" ref={wadah}>
