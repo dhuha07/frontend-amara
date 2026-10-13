@@ -23,6 +23,7 @@ const MENU = [
   { to: "/chat", label: "Riwayat Percakapan", icon: MessageSquare },
   { to: "/laporan", label: "Laporan", icon: BarChart3 },
   { to: "/pengguna", label: "Pengguna", icon: Users },
+  { to: "/consent", label: "Informed Consent", icon: FileText },
 ];
 
 export default function Sidebar({ open, onClose, collapsed = false }) {
