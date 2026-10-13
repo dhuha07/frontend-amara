@@ -2,4 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-body { @apply bg-app text-gray-900 font-sans; }
+:root {
+  --bg-app: #f9fafb;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.5s ease;
+}
+
+.dark {
+  --bg-app: #111827;
+}
+
+body {
+  touch-action: manipulation;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  transition: background-color 0.5s cubic-bezier(0.32,0.72,0,1), color 0.5s ease;
+  @apply bg-app text-gray-900 dark:text-gray-100 font-sans;
+}
+
+/* GPU */
+.gpu-accel { will-change: transform, opacity; backface-visibility: hidden; }
+.tap-effect { transition: all 0.2s cubic-bezier(0.4,0,0.2,1); }
+.tap-effect:active { transform: scale(0.97); }

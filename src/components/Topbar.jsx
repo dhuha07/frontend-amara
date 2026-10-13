@@ -24,8 +24,32 @@ export default function Topbar({ onMenuClick, onToggleCollapse, collapsed = fals
   const [dibaca, setDibaca] = useState([]);
   const [terbuka, setTerbuka] = useState(false);
   const [menuAkun, setMenuAkun] = useState(false);
+  const [isDark, setIsDark] = useState(document.documentElement.classList.contains("dark"));
   const wadah = useRef(null);
   const akunRef = useRef(null);
+
+  const toggleDarkMode = () => {
+    const root = document.documentElement;
+    if (isDark) {
+      root.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+      setIsDark(false);
+    } else {
+      root.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+      setIsDark(true);
+    }
+  };
+
+  useEffect(() => {
+    if (localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+      document.documentElement.classList.add("dark");
+      setIsDark(true);
+    } else {
+      document.documentElement.classList.remove("dark");
+      setIsDark(false);
+    }
+  }, []);
 
   const namaTampil = pengguna?.nama || "Admin";
   const inisial = namaTampil.charAt(0).toUpperCase();
@@ -113,6 +137,16 @@ export default function Topbar({ onMenuClick, onToggleCollapse, collapsed = fals
       </h1>
 
       <div className="ml-auto flex items-center gap-2 sm:gap-3">
+        {/* Tombol Dark Mode */}
+        <button
+          type="button"
+          onClick={toggleDarkMode}
+          aria-label="Ubah tema gelap atau terang"
+          title={isDark ? "Beralih ke Terang" : "Beralih ke Gelap"}
+          className="flex h-11 w-11 items-center justify-center rounded-lg hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald transition-transform active:scale-90"
+        >
+          {isDark ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} />}
+        </button>
         {/* Lonceng notifikasi */}
         <div className="relative" ref={wadah}>
           <button

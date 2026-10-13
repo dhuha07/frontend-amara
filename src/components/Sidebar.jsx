@@ -75,17 +75,17 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
 
   return (
     <>
-      {/* Lapisan gelap di belakang drawer (hanya mobile) */}
-      {open && (
-        <div
-          className="fixed inset-0 z-30 bg-black/50 md:hidden"
-          onClick={onClose}
-          aria-hidden="true"
-        />
-      )}
+      {/* Lapisan gelap di belakang drawer (hanya mobile) - fade smooth */}
+      <div
+        className={`fixed inset-0 z-30 bg-black/50 backdrop-blur-[2px] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] md:hidden ${
+          open ? "opacity-100 visible" : "pointer-events-none opacity-0 invisible"
+        }`}
+        onClick={onClose}
+        aria-hidden="true"
+      />
 
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-navy text-white transition-all duration-200 md:z-30 md:w-20 md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-navy text-white will-change-transform transform-gpu shadow-2xl transition-[transform,width,box-shadow] duration-[500ms] ease-[cubic-bezier(0.32,0.72,0,1)] md:z-30 md:w-20 md:translate-x-0 md:shadow-none ${
           collapsed ? "lg:w-20" : "lg:w-64"
         } ${open ? "translate-x-0" : "-translate-x-full"}`}
         aria-label="Menu utama"
