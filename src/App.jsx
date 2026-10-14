@@ -13,6 +13,7 @@ import Laporan from "./pages/Laporan";
 import Pengguna from "./pages/Pengguna";
 import Consent from "./pages/Consent";
 import Penjadwalan from "./pages/Penjadwalan";
+import ScanWA from "./pages/ScanWA";
 import NotFound from "./pages/NotFound";
 
 export default function App() {
@@ -38,6 +39,7 @@ export default function App() {
               <Route path="/pengguna" element={<Pengguna />} />
               <Route path="/consent" element={<Consent />} />
               <Route path="/penjadwalan" element={<Penjadwalan />} />
+              <Route path="/scan-wa" element={<ScanWA />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Route>

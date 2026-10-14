@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
+import IdleTimer from "../components/IdleTimer";
 
 const KUNCI_LIPAT = "amara_sidebar_lipat";
 
@@ -36,6 +37,7 @@ export default function AdminLayout() {
 
   return (
     <div className="min-h-screen bg-app">
+      <IdleTimer />
       <Sidebar open={sidebarOpen} onClose={tutupSidebar} collapsed={collapsed} />
       <Topbar
         onMenuClick={bukaSidebar}

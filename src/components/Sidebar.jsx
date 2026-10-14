@@ -24,6 +24,7 @@ const MENU = [
   { to: "/laporan", label: "Laporan", icon: BarChart3 },
   { to: "/pengguna", label: "Pengguna", icon: Users },
   { to: "/consent", label: "Informed Consent", icon: FileText },
+  { to: "/scan-wa", label: "Scan WhatsApp", icon: Bot },
 ];
 
 export default function Sidebar({ open, onClose, collapsed = false }) {
