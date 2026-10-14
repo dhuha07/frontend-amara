@@ -10,7 +10,9 @@ export default function ScanWA() {
   const fetchQR = async () => {
     try {
       const res = await api.get("/qr-status");
-      if (res.data.status === "connected" || res.data.wa_status === "online") {
+      // Debug: cek respon
+      console.log("QR Response:", res.data);
+      if (res.data.status === "connected") {
         setStatus("connected");
         setPesan("WhatsApp terhubung! Bot siap menerima pengaduan.");
         setQr(null);
