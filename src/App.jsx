@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import AdminLayout from "./components/AdminLayout";
+import AdminLayout from "./layouts/AdminLayout";
 import Login from "./pages/Login";
-import Daftar from "./pages/Daftar";
+import Register from "./pages/Register";
 import { Toaster } from "react-hot-toast";
 
 function AppRoutes() {
@@ -11,7 +11,7 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={!pengguna ? <Login /> : <Navigate to="/" replace />} />
-      <Route path="/daftar" element={!pengguna ? <Daftar /> : <Navigate to="/" replace />} />
+      <Route path="/daftar" element={!pengguna ? <Register /> : <Navigate to="/" replace />} />
       <Route
         path="/*"
         element={pengguna ? <AdminLayout /> : <Navigate to="/login" replace />}
