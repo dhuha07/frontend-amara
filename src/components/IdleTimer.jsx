@@ -1,34 +1,33 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 
 export default function IdleTimer() {
-  const { pengguna, keluar } = useAuth();
-  const navigate = useNavigate();
+  const { keluar, pengguna } = useAuth();
+  const timeout = 2 * 60 * 1000; // 2 Menit
 
   useEffect(() => {
-    if (!pengguna) return;
-    let timer;
-    const reset = () => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
+    if (!pengguna) return; // Jangan jalankan jika belum login
+
+    let logoutTimer;
+
+    const resetTimer = () => {
+      if (logoutTimer) clearTimeout(logoutTimer);
+      logoutTimer = setTimeout(() => {
+        console.log("Idle timeout reached. Logging out...");
         keluar();
-        toast("Sesi habis karena tidak ada aktivitas.", { icon: "🔒" });
-        navigate("/masuk");
-      }, 15 * 60 * 1000);
+      }, timeout);
     };
-    window.addEventListener("mousemove", reset);
-    window.addEventListener("keydown", reset);
-    window.addEventListener("click", reset);
-    reset();
+
+    const events = ["mousedown", "mousemove", "keydown", "scroll", "touchstart", "click"];
+    events.forEach((event) => window.addEventListener(event, resetTimer));
+
+    resetTimer();
+
     return () => {
-      clearTimeout(timer);
-      window.removeEventListener("mousemove", reset);
-      window.removeEventListener("keydown", reset);
-      window.removeEventListener("click", reset);
+      if (logoutTimer) clearTimeout(logoutTimer);
+      events.forEach((event) => window.removeEventListener(event, resetTimer));
     };
-  }, [pengguna, keluar, navigate]);
+  }, [keluar, pengguna]);
 
   return null;
 }
