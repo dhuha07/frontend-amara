@@ -3,20 +3,24 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import AdminLayout from "./layouts/AdminLayout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import IdleTimer from "./components/IdleTimer";
 import { Toaster } from "react-hot-toast";
 
 function AppRoutes() {
   const { pengguna } = useAuth();
 
   return (
-    <Routes>
-      <Route path="/login" element={!pengguna ? <Login /> : <Navigate to="/" replace />} />
-      <Route path="/daftar" element={!pengguna ? <Register /> : <Navigate to="/" replace />} />
-      <Route
-        path="/*"
-        element={pengguna ? <AdminLayout /> : <Navigate to="/login" replace />}
-      />
-    </Routes>
+    <>
+      <IdleTimer />
+      <Routes>
+        <Route path="/login" element={!pengguna ? <Login /> : <Navigate to="/" replace />} />
+        <Route path="/daftar" element={!pengguna ? <Register /> : <Navigate to="/" replace />} />
+        <Route
+          path="/*"
+          element={pengguna ? <AdminLayout /> : <Navigate to="/login" replace />}
+        />
+      </Routes>
+    </>
   );
 }
 
