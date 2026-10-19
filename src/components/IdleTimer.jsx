@@ -4,43 +4,45 @@ import toast from "react-hot-toast";
 
 export default function IdleTimer() {
   const { keluar, pengguna } = useAuth();
-  const timeout = 2 * 60 * 1000; // 2 Menit tepat
+  const timeout = 2 * 60 * 1000; // 2 Menit
   const timerRef = useRef(null);
+  const lastActivityRef = useRef(Date.now());
 
   useEffect(() => {
-    // Jika tidak ada user, jangan jalankan timer
     if (!pengguna) return;
 
     const logoutOtomatis = () => {
-      console.log("Sesi berakhir karena tidak ada aktivitas.");
-      toast.error("Sesi Anda telah berakhir. Silakan login kembali.", {
-        id: "session-expired", // Agar tidak muncul double
-        duration: 5000
-      });
+      console.log("Idle detected. Logging out...");
+      toast.error("Sesi Anda telah berakhir.", { id: "expired" });
       keluar();
-      // Paksa refresh halaman untuk memastikan semua state bersih
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 500);
+      window.location.href = "/login";
     };
 
     const resetTimer = () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(logoutOtomatis, timeout);
+      const now = Date.now();
+      // Hanya reset jika aktivitas terjadi minimal 1 detik setelah yang terakhir
+      // Ini mencegah sensor mouse/vibrasi meja me-reset timer terus-menerus
+      if (now - lastActivityRef.current > 1000) {
+        lastActivityRef.current = now;
+        if (timerRef.current) clearTimeout(timerRef.current);
+        timerRef.current = setTimeout(logoutOtomatis, timeout);
+      }
     };
 
-    // Daftar semua interaksi yang dianggap "aktif"
-    const events = ["mousedown", "mousemove", "keydown", "scroll", "touchstart", "click"];
+    // Gunakan event yang lebih PASTI (klik, ketik, sentuh)
+    // Hapus 'mousemove' dan 'scroll' agar tidak sensitif berlebih
+    const events = ["mousedown", "keydown", "touchstart", "click"];
+    
     events.forEach((event) => window.addEventListener(event, resetTimer));
-
-    // Mulai timer pertama kali
-    resetTimer();
+    
+    // Inisialisasi timer pertama
+    timerRef.current = setTimeout(logoutOtomatis, timeout);
 
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
       events.forEach((event) => window.removeEventListener(event, resetTimer));
     };
-  }, [keluar, pengguna, timeout]);
+  }, [keluar, pengguna]);
 
   return null;
 }
