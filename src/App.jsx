@@ -3,7 +3,6 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import AdminLayout from "./layouts/AdminLayout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
 import IdleTimer from "./components/IdleTimer";
 import { Toaster } from "react-hot-toast";
 
@@ -16,16 +15,10 @@ function AppRoutes() {
       <Routes>
         <Route path="/login" element={!pengguna ? <Login /> : <Navigate to="/" replace />} />
         <Route path="/daftar" element={!pengguna ? <Register /> : <Navigate to="/" replace />} />
-
-        {/* Rute yang butuh login: semua halaman admin ada di dalam AdminLayout */}
         <Route
-          path="/"
+          path="/*"
           element={pengguna ? <AdminLayout /> : <Navigate to="/login" replace />}
-        >
-          <Route index element={<Dashboard />} />
-          {/* Halaman lain ditambahkan di sini setelah nama filenya saya ketahui */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
+        />
       </Routes>
     </>
   );
