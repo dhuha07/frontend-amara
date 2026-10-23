@@ -2,15 +2,146 @@
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/amara_bulat.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="Dasbor admin AMARA Bot - layanan pengaduan DPMP4KB Kota Magelang"
+    />
+    <title>AMARA Bot - DPMP4KB Kota Magelang</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <title>AMARA Bot - DPMP4KB Kota Magelang</title>
+
+    <style>
+      /* ===== Kenyamanan tampilan (tidak mengubah tata letak maupun warna) ===== */
+      html {
+        scroll-behavior: smooth;
+        text-rendering: optimizeLegibility;
+      }
+      body {
+        overflow-x: hidden;
+      }
+      img {
+        max-width: 100%;
+      }
+      a,
+      button {
+        -webkit-tap-highlight-color: transparent;
+      }
+      a,
+      button,
+      input,
+      select,
+      textarea,
+      [role="button"] {
+        transition: background-color 0.15s ease, border-color 0.15s ease,
+          color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+      }
+      button:disabled {
+        cursor: not-allowed;
+      }
+      :focus-visible {
+        outline: 2px solid #10b981;
+        outline-offset: 2px;
+      }
+      td {
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* ===== Tabel responsif: bisa digeser ke samping di layar kecil ===== */
+      @media (max-width: 768px) {
+        table {
+          display: block;
+          max-width: 100%;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+        th,
+        td {
+          white-space: nowrap;
+        }
+      }
+
+      /* ===== Hormati pengaturan "kurangi gerakan" ===== */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+
+      /* ===== Keterbacaan tabel (mode gelap dan terang) ===== */
+
+      /* ---------- MODE GELAP ---------- */
+      html.dark thead,
+      html.dark thead tr,
+      html.dark thead th,
+      html.dark table th,
+      html.dark [role="columnheader"],
+      html.dark tr:has(> th) {
+        background-color: #273244 !important;
+        color: #d1d5db !important;
+      }
+      html.dark table th *,
+      html.dark table .uppercase {
+        color: #d1d5db !important;
+      }
+      html.dark table .bg-white,
+      html.dark table .bg-gray-50,
+      html.dark table .bg-gray-100 {
+        background-color: #273244 !important;
+      }
+      html.dark table a:not(.rounded-full),
+      html.dark table button:not(.rounded-full) {
+        color: #93c5fd !important;
+      }
+      html.dark tbody tr:hover,
+      html.dark tbody tr:hover > td {
+        background-color: #2f3b4f !important;
+      }
+      html.dark tbody tr:hover td,
+      html.dark tbody tr:hover td *:not(.rounded-full):not(a):not(button) {
+        color: #f3f4f6 !important;
+      }
+
+      /* ---------- MODE TERANG ---------- */
+      html:not(.dark) thead,
+      html:not(.dark) thead tr,
+      html:not(.dark) thead th,
+      html:not(.dark) table th,
+      html:not(.dark) tr:has(> th) {
+        background-color: #f3f4f6 !important;
+        color: #374151 !important;
+      }
+      html:not(.dark) table th *,
+      html:not(.dark) table .uppercase {
+        color: #374151 !important;
+      }
+      html:not(.dark) table a:not(.rounded-full),
+      html:not(.dark) table button:not(.rounded-full) {
+        color: #1e3a8a !important;
+      }
+      html:not(.dark) tbody tr:hover,
+      html:not(.dark) tbody tr:hover > td {
+        background-color: #eef2f7 !important;
+      }
+      html:not(.dark) tbody tr:hover td,
+      html:not(.dark) tbody tr:hover td *:not(.rounded-full):not(a):not(button) {
+        color: #111827 !important;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

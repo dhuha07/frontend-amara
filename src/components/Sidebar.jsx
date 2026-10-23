@@ -13,7 +13,6 @@ import {
   UserCog,
   ChevronUp,
 } from "lucide-react";
-import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
 
 // Daftar menu navigasi
@@ -27,6 +26,12 @@ const MENU = [
   { to: "/scan-wa", label: "Scan WhatsApp", icon: Bot },
 ];
 
+// Cek status bot langsung ke backend (tidak lewat api.js agar tidak memunculkan
+// notifikasi error berulang saat server sedang tidak terjangkau)
+const ALAMAT_API = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+const JEDA_CEK_MS = 15000;
+const BATAS_WAKTU_MS = 8000;
+
 export default function Sidebar({ open, onClose, collapsed = false }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,12 +41,27 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
   const [menuProfil, setMenuProfil] = useState(false);
   const profilRef = useRef(null);
 
-  // Cek status bot setiap 5 detik
+  // Cek status bot secara berkala; berhenti saat tab tidak terlihat
   useEffect(() => {
+    let dibatalkan = false;
+    let urutan = 0;
+    let pengendali = null;
+
     const cekStatus = async () => {
+      if (document.hidden) return;
+      const saya = ++urutan;
+      if (pengendali) pengendali.abort();
+      pengendali = new AbortController();
+      const batasWaktu = setTimeout(() => pengendali.abort(), BATAS_WAKTU_MS);
       try {
-        const r = await api.get("/");
-        if (r.data.wa_status === "online") {
+        const res = await fetch(`${ALAMAT_API}/`, {
+          signal: pengendali.signal,
+          headers: { Accept: "application/json" },
+        });
+        if (!res.ok) throw new Error("Server tidak merespons");
+        const data = await res.json();
+        if (dibatalkan || saya !== urutan) return;
+        if (data.wa_status === "online") {
           setBotStatus("online");
           setBotMessage("Terhubung ke WhatsApp dan siap menerima pengaduan.");
         } else {
@@ -49,14 +69,28 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
           setBotMessage("WhatsApp tidak terhubung. Periksa Fonnte.");
         }
       } catch {
+        if (dibatalkan || saya !== urutan) return;
         setBotStatus("offline");
         setBotMessage("Tidak terhubung ke server bot.");
+      } finally {
+        clearTimeout(batasWaktu);
       }
     };
-    
+
+    const saatTabTampil = () => {
+      if (!document.hidden) cekStatus();
+    };
+
     cekStatus();
-    const interval = setInterval(cekStatus, 5000);
-    return () => clearInterval(interval);
+    const interval = setInterval(cekStatus, JEDA_CEK_MS);
+    document.addEventListener("visibilitychange", saatTabTampil);
+
+    return () => {
+      dibatalkan = true;
+      if (pengendali) pengendali.abort();
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", saatTabTampil);
+    };
   }, []);
 
   // Kelas bantu: tampilan penuh (teks) vs ringkas (hanya ikon)
@@ -79,7 +113,7 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
 
   // Tutup drawer otomatis saat pindah halaman
   useEffect(() => {
-    onClose();
+    if (open) onClose();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
@@ -100,7 +134,7 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
 
   return (
     <>
-      {/* Lapisan gelap di belakang drawer (hanya mobile) - fade smooth */}
+      {/* Lapisan gelap di belakang drawer (hanya mobile) */}
       <div
         className={`fixed inset-0 z-30 bg-black/50 backdrop-blur-[2px] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] md:hidden ${
           open ? "opacity-100 visible" : "pointer-events-none opacity-0 invisible"
@@ -173,10 +207,14 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
           </div>
         </nav>
 
-        {/* Bagian bawah: indikator bot dan profil (hanya tampilan, bukan tombol) */}
+        {/* Bagian bawah: indikator bot dan profil */}
         <div className="shrink-0 space-y-3 border-t border-white/10 p-3">
           {/* Indikator bot - tampilan penuh */}
-          <div className={`rounded-xl bg-white/10 p-3 ${penuh}`}>
+          <div
+            className={`rounded-xl bg-white/10 p-3 ${penuh}`}
+            role="status"
+            aria-live="polite"
+          >
             <div className="flex items-center gap-2">
               {botStatus === "online" ? (
                 <>
@@ -206,7 +244,16 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
           </div>
 
           {/* Indikator bot - tampilan ringkas */}
-          <div className={`justify-center py-1 ${ringkas}`} title={botStatus === "online" ? "Bot Aktif" : botStatus === "checking" ? "Memeriksa..." : "Bot Offline"}>
+          <div
+            className={`justify-center py-1 ${ringkas}`}
+            title={
+              botStatus === "online"
+                ? "Bot Aktif"
+                : botStatus === "checking"
+                ? "Memeriksa..."
+                : "Bot Offline"
+            }
+          >
             {botStatus === "online" ? (
               <span className="relative flex h-3 w-3">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald opacity-60" />
@@ -219,13 +266,16 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
             )}
           </div>
 
-          {/* Profil admin - interaktif */}
+          {/* Profil admin */}
           <div className="relative" ref={profilRef}>
             <button
               type="button"
               onClick={() => setMenuProfil((v) => !v)}
-              className={`w-full flex items-center gap-3 rounded-xl px-2 py-1.5 hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald ${
-                collapsed ? "justify-center md:hidden" : "justify-start"
+              aria-haspopup="menu"
+              aria-expanded={menuProfil}
+              title={namaTampil}
+              className={`flex w-full items-center gap-3 rounded-xl px-2 py-1.5 transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald md:justify-center ${
+                collapsed ? "" : "lg:justify-start"
               }`}
             >
               <div
@@ -240,33 +290,45 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
                   {peranTampil}
                 </p>
               </div>
-              <ChevronUp size={16} className={`text-blue-200 transition-transform ${menuProfil ? "rotate-180" : ""} ${penuh}`} />
+              <ChevronUp
+                size={16}
+                className={`text-blue-200 transition-transform ${menuProfil ? "rotate-180" : ""} ${penuh}`}
+                aria-hidden="true"
+              />
             </button>
 
             {menuProfil && (
-              <div className="absolute bottom-full left-0 mb-2 w-full min-w-[200px] overflow-hidden rounded-xl bg-gray-900 border border-gray-700 py-1 text-white shadow-xl z-50">
+              <div
+                role="menu"
+                className="absolute bottom-full left-0 z-50 mb-2 w-full min-w-[200px] overflow-hidden rounded-xl border border-gray-700 bg-gray-900 py-1 text-white shadow-xl"
+              >
                 <div className="border-b border-gray-800 px-4 py-2">
                   <p className="text-xs font-semibold text-gray-400">Masuk sebagai</p>
                   <p className="truncate text-sm font-bold">{namaTampil}</p>
                 </div>
                 <button
                   type="button"
-                  onClick={() => { setMenuProfil(false); navigate("/pengguna"); }}
-                  className="flex w-full items-center gap-2 px-4 py-2.5 text-xs font-medium hover:bg-gray-800 transition-colors"
+                  role="menuitem"
+                  onClick={() => {
+                    setMenuProfil(false);
+                    navigate("/pengguna");
+                  }}
+                  className="flex w-full items-center gap-2 px-4 py-2.5 text-xs font-medium transition-colors hover:bg-gray-800"
                 >
-                  <UserCog size={14} />
+                  <UserCog size={14} aria-hidden="true" />
                   Kelola Pengguna
                 </button>
                 <button
                   type="button"
+                  role="menuitem"
                   onClick={() => {
                     setMenuProfil(false);
                     keluar();
                     toast.success("Berhasil keluar");
                   }}
-                  className="flex w-full items-center gap-2 px-4 py-2.5 text-xs font-medium text-red-400 hover:bg-red-500/10 transition-colors"
+                  className="flex w-full items-center gap-2 px-4 py-2.5 text-xs font-medium text-red-400 transition-colors hover:bg-red-500/10"
                 >
-                  <LogOut size={14} />
+                  <LogOut size={14} aria-hidden="true" />
                   Keluar Aplikasi
                 </button>
               </div>
