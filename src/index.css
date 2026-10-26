@@ -2,26 +2,547 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =====================================================================
+   1. PALET WARNA (tidak diubah: satu tempat untuk mode terang dan gelap)
+   ===================================================================== */
 :root {
-  --bg-app: #f9fafb;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.5s ease;
+  --bg-app: #f9fafb;       /* latar aplikasi */
+  --c-surface: #ffffff;    /* kartu, tabel, kotak */
+  --c-surface-2: #f3f4f6;  /* header tabel, blok halus */
+  --c-border: #e5e7eb;     /* garis pemisah */
+  --c-text: #111827;       /* teks utama */
+  --c-text-2: #4b5563;     /* teks kedua */
+  --c-text-3: #6b7280;     /* teks redup (tanggal, keterangan) */
+  --c-hover: #eef2f7;      /* baris saat disorot kursor */
+  --c-link: #1e3a8a;       /* tautan */
+  --c-scroll: #cbd5e1;     /* scrollbar */
+  --c-focus: #10b981;      /* cincin fokus keyboard (warna emerald yang sudah dipakai) */
+  color-scheme: light;
 }
 
-.dark {
+html.dark {
   --bg-app: #111827;
+  --c-surface: #1f2937;
+  --c-surface-2: #273244;
+  --c-border: #374151;
+  --c-text: #f3f4f6;       /* bukan putih murni, supaya tidak silau */
+  --c-text-2: #d1d5db;
+  --c-text-3: #9ca3af;
+  --c-hover: #2f3b4f;
+  --c-link: #93c5fd;
+  --c-scroll: #4b5563;
+  color-scheme: dark;      /* kontrol bawaan browser ikut gelap */
+}
+
+/* =====================================================================
+   2. DASAR HALAMAN
+   ===================================================================== */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;          /* cegah teks membesar sendiri saat HP diputar */
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  touch-action: manipulation;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-  transition: background-color 0.5s cubic-bezier(0.32,0.72,0,1), color 0.5s ease;
-  @apply bg-app text-gray-900 dark:text-gray-100 font-sans;
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;              /* tinggi layar HP yang benar (bar alamat naik/turun) */
+  background-color: var(--bg-app);
+  color: var(--c-text);
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.5;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* GPU */
-.gpu-accel { will-change: transform, opacity; backface-visibility: hidden; }
-.tap-effect { transition: all 0.2s cubic-bezier(0.4,0,0.2,1); }
-.tap-effect:active { transform: scale(0.97); }
+.bg-app {
+  background-color: var(--bg-app);
+}
+
+/* Gambar dan media tidak pernah melebihi wadahnya */
+img,
+svg,
+video {
+  max-width: 100%;
+}
+
+/* Teks panjang (nama, email, URL) tidak mendorong layout melebar di layar kecil */
+h1, h2, h3, h4, p, td, th, li {
+  overflow-wrap: break-word;
+}
+
+/* =====================================================================
+   3. KENYAMANAN
+   ===================================================================== */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--c-scroll) transparent;
+}
+
+::selection {
+  background: rgba(16, 185, 129, 0.35);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--c-text-3);
+  opacity: 1;
+}
+
+select option {
+  background-color: var(--c-surface);
+  color: var(--c-text);
+}
+
+/* Fokus keyboard terlihat jelas (hanya muncul saat memakai Tab, bukan saat klik) */
+:focus-visible {
+  outline: 2px solid var(--c-focus);
+  outline-offset: 2px;
+}
+
+/* Tombol dan tautan terasa responsif tanpa mengubah tampilan */
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* HP: ukuran huruf kolom isian minimal 16px supaya iOS tidak zoom otomatis */
+@media (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* Hormati pengguna yang mematikan animasi di perangkatnya */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =====================================================================
+   4. WARNA TEKS
+   ===================================================================== */
+/* Mode terang: teks redup dibuat sedikit lebih gelap agar terbaca */
+html:not(.dark) .text-gray-400 {
+  color: var(--c-text-3);
+}
+
+/* Mode gelap: semua teks abu-abu mengikuti palet gelap */
+html.dark .text-black,
+html.dark .text-gray-900,
+html.dark .text-gray-800 {
+  color: var(--c-text);
+}
+html.dark .text-gray-700,
+html.dark .text-gray-600 {
+  color: var(--c-text-2);
+}
+html.dark .text-gray-500,
+html.dark .text-gray-400 {
+  color: var(--c-text-3);
+}
+html.dark .text-navy {
+  color: var(--c-link);
+}
+
+/* =====================================================================
+   5. LATAR DAN GARIS (MODE GELAP)
+   ===================================================================== */
+html.dark .bg-white {
+  background-color: var(--c-surface);
+}
+html.dark .bg-gray-50,
+html.dark .bg-gray-100 {
+  background-color: var(--c-surface-2);
+}
+
+:where(html.dark *) {
+  border-color: var(--c-border);
+}
+html.dark .border-gray-100,
+html.dark .border-gray-200,
+html.dark .border-gray-300 {
+  border-color: var(--c-border);
+}
+html.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]),
+html.dark .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--c-border);
+}
+
+/* =====================================================================
+   6. TABEL (satu aturan untuk dua mode; sebelumnya ditulis dua kali)
+   ===================================================================== */
+thead,
+thead tr,
+thead th {
+  background-color: var(--c-surface-2) !important;
+  color: var(--c-text-2) !important;
+}
+
+tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+/* Baris saat disorot: latar pada baris dan selnya */
+tbody tr:hover,
+tbody tr:hover > td {
+  background-color: var(--c-hover) !important;
+}
+
+/* Teks baris yang disorot selalu terbaca.
+   Pengecualian: lencana (rounded-full), tautan, dan tombol (beserta isinya)
+   tetap memakai warnanya sendiri, jadi tombol "Hapus" merah tidak ikut jadi abu-abu. */
+tbody tr:hover td,
+tbody tr:hover td *:not(.rounded-full):not(a):not(button):not(button *) {
+  color: var(--c-text) !important;
+}
+
+tbody td a:not([class*="bg-"]) {
+  color: var(--c-link) !important;
+}
+
+/* =====================================================================
+   7. EFEK HOVER UMUM
+   ===================================================================== */
+html.dark .hover\:bg-gray-50:hover,
+html.dark .hover\:bg-gray-100:hover,
+html:not(.dark) .hover\:bg-gray-50:hover {
+  background-color: var(--c-hover);
+}
+
+/* =====================================================================
+   8. LENCANA BERWARNA DI MODE GELAP (lembut, tidak silau)
+   ===================================================================== */
+html.dark .bg-red-50,
+html.dark .bg-red-100 {
+  background-color: rgba(239, 68, 68, 0.18);
+}
+html.dark .bg-amber-100,
+html.dark .bg-yellow-100,
+html.dark .bg-orange-100 {
+  background-color: rgba(245, 158, 11, 0.18);
+}
+html.dark .bg-emerald-100,
+html.dark .bg-green-100 {
+  background-color: rgba(16, 185, 129, 0.18);
+}
+html.dark .bg-blue-100,
+html.dark .bg-sky-100,
+html.dark .bg-indigo-100 {
+  background-color: rgba(59, 130, 246, 0.2);
+}
+html.dark .bg-purple-100 {
+  background-color: rgba(168, 85, 247, 0.2);
+}
+
+html.dark .text-red-600,
+html.dark .text-red-700,
+html.dark .text-red-800 {
+  color: #fca5a5;
+}
+html.dark .text-amber-700,
+html.dark .text-amber-800,
+html.dark .text-yellow-700,
+html.dark .text-yellow-800,
+html.dark .text-orange-700,
+html.dark .text-orange-800 {
+  color: #fcd34d;
+}
+html.dark .text-emerald-700,
+html.dark .text-emerald-800,
+html.dark .text-green-700,
+html.dark .text-green-800 {
+  color: #6ee7b7;
+}
+html.dark .text-blue-700,
+html.dark .text-blue-800,
+html.dark .text-sky-800,
+html.dark .text-indigo-800 {
+  color: #93c5fd;
+}
+html.dark .text-purple-700,
+html.dark .text-purple-800 {
+  color: #d8b4fe;
+}
+/* =====================================================================
+   9. ANIMASI PREMIUM (halus, tenang, tanpa pantulan berlebihan)
+   ===================================================================== */
+:root {
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);  /* melambat sangat halus */
+  --ease-ios: cubic-bezier(0.32, 0.72, 0, 1);     /* kurva sheet iOS */
+}
+
+/* ----- Klik: cincin lembut ----- */
+.klik-riak {
+  position: fixed;
+  z-index: 9999;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(16, 185, 129, 0.55);
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.22), rgba(16, 185, 129, 0) 70%);
+  pointer-events: none;
+  animation: klik-cincin 0.9s var(--ease-premium) forwards;
+}
+@keyframes klik-cincin {
+  from { transform: scale(0.4); opacity: 1; }
+  to   { transform: scale(5); opacity: 0; }
+}
+
+/* ----- Tombol dan tautan: transisi halus, "tertekan" saat diklik ----- */
+button,
+a,
+[role="button"],
+select,
+summary {
+  transition: transform 0.3s var(--ease-premium), box-shadow 0.4s var(--ease-premium),
+    background-color 0.3s ease, color 0.3s ease, opacity 0.3s ease, border-color 0.3s ease;
+}
+button:not(:disabled):active,
+[role="button"]:active {
+  transform: scale(0.97);
+  transition-duration: 0.12s;
+}
+
+/* ----- Pindah halaman: memudar masuk ----- */
+@keyframes halaman-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.halaman-masuk {
+  animation: halaman-fade 0.45s ease backwards;
+}
+
+/* ----- Scroll reveal kartu (dipasang otomatis oleh useScrollReveal) ----- */
+[data-rv="tunggu"] {
+  opacity: 0;
+  translate: 0 24px;
+  filter: blur(6px);
+}
+[data-rv="masuk"] {
+  opacity: 1;
+  translate: 0 0;
+  filter: blur(0);
+  transition: opacity 0.9s var(--ease-premium), translate 1s var(--ease-premium),
+    filter 0.9s var(--ease-premium);
+  transition-delay: var(--rv-d, 0ms);
+}
+
+/* Kartu yang bisa diklik terangkat sedikit saat disorot */
+[data-rv="selesai"][data-lift] {
+  transition: translate 0.45s var(--ease-premium), box-shadow 0.45s var(--ease-premium);
+}
+@media (hover: hover) {
+  [data-rv="selesai"][data-lift]:hover {
+    translate: 0 -3px;
+    box-shadow: 0 16px 36px -14px rgba(0, 0, 0, 0.3);
+  }
+}
+[data-rv="selesai"][data-lift]:active {
+  translate: 0 -1px;
+}
+
+/* ----- Dropdown dan pop-up ----- */
+@keyframes pop-masuk {
+  from { opacity: 0; transform: translateY(6px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+.pop-masuk {
+  transform-origin: bottom left;
+  animation: pop-masuk 0.35s var(--ease-premium) both;
+}
+.pop-atas {
+  transform-origin: top right;
+  animation: pop-masuk 0.35s var(--ease-premium) both;
+}
+
+/* ----- Sidebar ----- */
+@keyframes sb3-masuk {
+  from { opacity: 0; translate: -18px 0; filter: blur(4px); }
+  to   { opacity: 1; translate: 0 0; filter: blur(0); }
+}
+.sb3-masuk {
+  animation: sb3-masuk 0.9s var(--ease-premium) backwards;
+  animation-delay: var(--d, 0ms);
+}
+
+.sb3-link {
+  position: relative;
+  transition: color 0.3s ease, background-color 0.3s ease, transform 0.15s ease;
+}
+.sb3-link:active {
+  transform: scale(0.97);
+}
+.sb3-ikon {
+  opacity: 0.85;
+  transition: transform 0.45s var(--ease-premium), opacity 0.3s ease;
+}
+.sb3-link[aria-current="page"] .sb3-ikon {
+  opacity: 1;
+}
+.sb3-teks {
+  transition: translate 0.45s var(--ease-premium);
+}
+@media (hover: hover) {
+  .sb3-link:hover .sb3-ikon {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  .sb3-link:hover .sb3-teks {
+    translate: 3px 0;
+  }
+}
+
+/* Panel penanda menu aktif: meluncur dari menu lama ke menu baru */
+.sb3-indikator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.15);
+  border-left: 4px solid #10b981;
+  pointer-events: none;
+  will-change: transform;
+  transition: transform 0.65s var(--ease-premium), height 0.65s var(--ease-premium);
+}
+
+/* Header ikut bergerak seirama dengan sidebar saat dilipat atau dibentang */
+header.fixed.top-0 {
+  transition-property: left;
+  transition-duration: 700ms;
+  transition-timing-function: var(--ease-ios);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .klik-riak, .halaman-masuk, .pop-masuk, .pop-atas, .sb3-masuk {
+    animation: none !important;
+  }
+}
+/* =====================================================================
+   12. GRADIEN ALA APPLE (hanya warna; layout tidak berubah)
+   ===================================================================== */
+:root {
+  --aurora: 1;   /* kekuatan gradien: 0 = mati, 0.6 = halus, 1 = jelas, 1.3 = kuat */
+}
+
+/* ----- 12a. Lapisan aurora di atas halaman (di bawah header dan sidebar) ----- */
+body::after {
+  content: "";
+  position: fixed;
+  inset: -15%;
+  z-index: 10;
+  pointer-events: none;
+  opacity: var(--aurora);
+  mix-blend-mode: multiply;
+  background:
+    radial-gradient(42% 46% at 14% 18%, rgba(52, 211, 153, 0.55), transparent 70%),
+    radial-gradient(46% 50% at 88% 10%, rgba(96, 165, 250, 0.50), transparent 70%),
+    radial-gradient(44% 48% at 78% 92%, rgba(129, 140, 248, 0.40), transparent 70%),
+    radial-gradient(38% 42% at 6% 88%, rgba(56, 189, 248, 0.38), transparent 70%);
+}
+html.dark body::after {
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(42% 46% at 14% 18%, rgba(16, 185, 129, 0.38), transparent 70%),
+    radial-gradient(46% 50% at 88% 10%, rgba(59, 130, 246, 0.40), transparent 70%),
+    radial-gradient(44% 48% at 78% 92%, rgba(99, 102, 241, 0.34), transparent 70%),
+    radial-gradient(38% 42% at 6% 88%, rgba(14, 165, 233, 0.28), transparent 70%);
+}
+
+/* Bergeser pelan, hanya di desktop (di HP dibiarkan diam supaya hemat baterai) */
+@keyframes aurora-geser {
+  from { transform: translate3d(-4%, -3%, 0) scale(1); }
+  to   { transform: translate3d(4%, 4%, 0) scale(1.1); }
+}
+@media (hover: hover) and (pointer: fine) {
+  body::after {
+    animation: aurora-geser 26s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+}
+
+/* ----- 12b. Sidebar, header, dan elemen navy: kilau gradien ----- */
+.bg-navy {
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0) 45%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+}
+aside.bg-navy {
+  background-image:
+    radial-gradient(130% 60% at 0% 100%, rgba(16, 185, 129, 0.42), transparent 62%),
+    radial-gradient(100% 45% at 100% 0%, rgba(96, 165, 250, 0.26), transparent 70%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(0, 0, 0, 0.22));
+}
+header.bg-navy {
+  background-image:
+    radial-gradient(55% 240% at 100% 0%, rgba(16, 185, 129, 0.38), transparent 70%),
+    radial-gradient(40% 200% at 0% 0%, rgba(96, 165, 250, 0.22), transparent 70%),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 60%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 12px 32px -14px rgba(15, 23, 42, 0.55);
+}
+
+/* ----- 12c. Tombol dan lencana hijau: gradien halus ----- */
+button.bg-emerald,
+a.bg-emerald,
+div.bg-emerald {
+  background-image: linear-gradient(160deg, #6ee7b7 0%, #10b981 45%, #047857 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 8px 18px -8px rgba(16, 185, 129, 0.75);
+}
+
+/* ----- 12d. Kartu: kilau kaca ----- */
+html:not(.dark) .bg-white:is([data-rv="tunggu"], [data-rv="masuk"], [data-rv="selesai"]) {
+  background-color: rgba(255, 255, 255, 0.7);
+  background-image: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 65%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 14px 34px -16px rgba(30, 58, 138, 0.3);
+}
+html.dark .bg-white:is([data-rv="tunggu"], [data-rv="masuk"], [data-rv="selesai"]) {
+  background-color: rgba(31, 41, 55, 0.7);
+  background-image: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 55%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 18px 38px -18px rgba(0, 0, 0, 0.75);
+}
+
+/* Kartu yang bisa diklik: terangkat dengan cahaya hijau (harus di bawah aturan kaca) */
+html [data-rv="selesai"][data-lift]:hover {
+  translate: 0 -3px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 22px 46px -18px rgba(16, 185, 129, 0.5),
+    0 8px 18px -10px rgba(0, 0, 0, 0.3);
+}
+
+/* ----- 12e. Judul halaman bergradien ----- */
+main h1 {
+  width: fit-content;
+  background-image: linear-gradient(100deg, #0f172a 5%, #1e3a8a 55%, #059669 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+html.dark main h1 {
+  background-image: linear-gradient(100deg, #f9fafb 5%, #bfdbfe 55%, #6ee7b7 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::after {
+    animation: none !important;
+  }
+}

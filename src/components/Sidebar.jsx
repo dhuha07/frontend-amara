@@ -27,6 +27,10 @@ const MENU = [
   { to: "/scan-wa", label: "Scan WhatsApp", icon: Bot },
 ];
 
+// Jeda antar menu saat animasi masuk (milidetik)
+const JEDA_AWAL = 160;
+const JEDA_MENU = 75;
+
 export default function Sidebar({ open, onClose, collapsed = false }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -34,14 +38,34 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
   const [botStatus, setBotStatus] = useState("checking");
   const [botMessage, setBotMessage] = useState("Memeriksa status...");
   const [menuProfil, setMenuProfil] = useState(false);
+  const [animKey, setAnimKey] = useState(0);
   const profilRef = useRef(null);
 
-  // Cek status bot setiap 5 detik
+  // Mainkan ulang animasi masuk saat drawer dibuka (HP)
   useEffect(() => {
+    if (open) setAnimKey((k) => k + 1);
+  }, [open]);
+
+  // Mainkan ulang animasi masuk saat sidebar dilipat atau dibentang (desktop) dan saat pertama dimuat
+  useEffect(() => {
+    setAnimKey((k) => k + 1);
+  }, [collapsed]);
+
+  // Cek status bot setiap 10 detik (berhenti saat tab tidak terlihat)
+  useEffect(() => {
+    let aktif = true;
+
     const cekStatus = async () => {
+      if (document.hidden) return;
       try {
         const r = await api.get("/");
-        if (r.data.wa_status === "online") {
+        if (!aktif) return;
+        // Jika balasan bukan JSON dari API (misalnya HTML halaman frontend),
+        // berarti alamat API belum benar
+        if (!r.data || typeof r.data !== "object") {
+          setBotStatus("offline");
+          setBotMessage("Server bot tidak ditemukan. Periksa alamat API (VITE_API_BASE_URL).");
+        } else if (r.data.wa_status === "online") {
           setBotStatus("online");
           setBotMessage("Terhubung ke WhatsApp dan siap menerima pengaduan.");
         } else {
@@ -49,14 +73,24 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
           setBotMessage("WhatsApp tidak terhubung. Periksa Fonnte.");
         }
       } catch {
+        if (!aktif) return;
         setBotStatus("offline");
         setBotMessage("Tidak terhubung ke server bot.");
       }
     };
-    
+
+    const saatTampil = () => {
+      if (!document.hidden) cekStatus();
+    };
+
     cekStatus();
-    const interval = setInterval(cekStatus, 5000);
-    return () => clearInterval(interval);
+    const interval = setInterval(cekStatus, 10000);
+    document.addEventListener("visibilitychange", saatTampil);
+    return () => {
+      aktif = false;
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", saatTampil);
+    };
   }, []);
 
   // Kelas bantu: tampilan penuh (teks) vs ringkas (hanya ikon)
@@ -100,19 +134,24 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
 
   return (
     <>
-      {/* Lapisan gelap di belakang drawer (hanya mobile) - fade smooth */}
+      {/* Lapisan gelap di belakang drawer (hanya mobile) */}
       <div
-        className={`fixed inset-0 z-30 bg-black/50 backdrop-blur-[2px] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] md:hidden ${
+        className={`fixed inset-0 z-30 bg-black/60 backdrop-blur-sm transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] md:hidden ${
           open ? "opacity-100 visible" : "pointer-events-none opacity-0 invisible"
         }`}
         onClick={onClose}
         aria-hidden="true"
       />
 
+      {/* Di HP: drawer meluncur dengan pantulan besar dan cahaya hijau di tepinya.
+          Bagian "before" menutup celah di tepi kiri saat pantulan.
+          Di desktop: lebar berubah halus saat dilipat atau dibentang. */}
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-navy text-white will-change-transform transform-gpu shadow-2xl transition-[transform,width,box-shadow] duration-[500ms] ease-[cubic-bezier(0.32,0.72,0,1)] md:z-30 md:w-20 md:translate-x-0 md:shadow-none ${
-          collapsed ? "lg:w-20" : "lg:w-64"
-        } ${open ? "translate-x-0" : "-translate-x-full"}`}
+        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-navy text-white will-change-transform transform-gpu transition-[transform,width,box-shadow] before:absolute before:inset-y-0 before:right-full before:w-16 before:bg-navy before:content-[''] md:z-30 md:w-20 md:translate-x-0 md:shadow-none md:before:hidden ${
+          open
+            ? "duration-[800ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] shadow-[0_0_70px_rgba(16,185,129,0.35)]"
+            : "duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] shadow-2xl"
+        } ${collapsed ? "lg:w-20" : "lg:w-64"} ${open ? "translate-x-0" : "-translate-x-full"}`}
         aria-label="Menu utama"
       >
         {/* Logo */}
@@ -121,10 +160,14 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
             collapsed ? "" : "lg:justify-start"
           }`}
         >
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald">
+          <div className="sb2-bot flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald">
             <Bot size={20} aria-hidden="true" />
           </div>
-          <div className={`min-w-0 ${penuh}`}>
+          <div
+            key={`teks-${animKey}`}
+            className={`sb2-masuk min-w-0 ${penuh}`}
+            style={{ "--d": "120ms" }}
+          >
             <p className="text-sm font-bold leading-tight">AMARA Bot</p>
             <p className="truncate text-[11px] leading-tight text-blue-100">
               DPMP4KB Kota Magelang
@@ -134,28 +177,32 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
             type="button"
             onClick={onClose}
             aria-label="Tutup menu"
-            className="ml-auto flex h-10 w-10 items-center justify-center rounded-lg hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald md:hidden"
+            className={`ml-auto flex h-10 w-10 items-center justify-center rounded-lg transition-all duration-500 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald md:hidden ${
+              open ? "rotate-0 scale-100 opacity-100 delay-300" : "-rotate-90 scale-50 opacity-0"
+            }`}
           >
             <X size={20} />
           </button>
         </div>
 
-        {/* Menu */}
-        <nav className="flex-1 overflow-y-auto py-4">
+        {/* Menu (dibangun ulang tiap animKey berubah supaya animasi masuk main lagi) */}
+        <nav key={animKey} className="flex-1 overflow-y-auto overflow-x-hidden py-4">
           <p
-            className={`mb-2 px-5 text-[11px] font-semibold uppercase tracking-wider text-blue-200/70 ${penuh}`}
+            className={`sb2-masuk mb-2 px-5 text-[11px] font-semibold uppercase tracking-wider text-blue-200/70 ${penuh}`}
+            style={{ "--d": `${JEDA_AWAL - 60}ms` }}
           >
             Menu Utama
           </p>
           <div className="space-y-1">
-            {MENU.map(({ to, label, icon: Icon }) => (
+            {MENU.map(({ to, label, icon: Icon }, i) => (
               <NavLink
                 key={to}
                 to={to}
                 end={to === "/"}
                 title={label}
+                style={{ "--d": `${JEDA_AWAL + i * JEDA_MENU}ms` }}
                 className={({ isActive }) =>
-                  `flex min-h-[48px] items-center gap-3 border-l-4 px-4 py-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-emerald md:justify-center md:px-0 ${
+                  `sb2-link sb2-masuk flex min-h-[48px] items-center gap-3 border-l-4 px-4 py-3 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-emerald md:justify-center md:px-0 ${
                     collapsed ? "" : "lg:justify-start lg:px-4"
                   } ${
                     isActive
@@ -164,8 +211,10 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
                   }`
                 }
               >
-                <Icon size={20} className="shrink-0" aria-hidden="true" />
-                <span className={`md:hidden ${collapsed ? "" : "lg:inline"}`}>
+                <Icon size={20} className="sb2-ikon shrink-0" aria-hidden="true" />
+                <span
+                  className={`sb2-teks sb2-label md:hidden ${collapsed ? "" : "lg:inline-block"}`}
+                >
                   {label}
                 </span>
               </NavLink>
@@ -173,8 +222,12 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
           </div>
         </nav>
 
-        {/* Bagian bawah: indikator bot dan profil (hanya tampilan, bukan tombol) */}
-        <div className="shrink-0 space-y-3 border-t border-white/10 p-3">
+        {/* Bagian bawah: indikator bot dan profil */}
+        <div
+          key={`bawah-${animKey}`}
+          className="sb2-masuk shrink-0 space-y-3 border-t border-white/10 p-3"
+          style={{ "--d": `${JEDA_AWAL + MENU.length * JEDA_MENU + 60}ms` }}
+        >
           {/* Indikator bot - tampilan penuh */}
           <div className={`rounded-xl bg-white/10 p-3 ${penuh}`}>
             <div className="flex items-center gap-2">
@@ -240,11 +293,11 @@ export default function Sidebar({ open, onClose, collapsed = false }) {
                   {peranTampil}
                 </p>
               </div>
-              <ChevronUp size={16} className={`text-blue-200 transition-transform ${menuProfil ? "rotate-180" : ""} ${penuh}`} />
+              <ChevronUp size={16} className={`text-blue-200 transition-transform duration-300 ${menuProfil ? "rotate-180" : ""} ${penuh}`} />
             </button>
 
             {menuProfil && (
-              <div className="absolute bottom-full left-0 mb-2 w-full min-w-[200px] overflow-hidden rounded-xl bg-gray-900 border border-gray-700 py-1 text-white shadow-xl z-50">
+              <div className="sb2-pop absolute bottom-full left-0 mb-2 w-full min-w-[200px] overflow-hidden rounded-xl bg-gray-900 border border-gray-700 py-1 text-white shadow-xl z-50">
                 <div className="border-b border-gray-800 px-4 py-2">
                   <p className="text-xs font-semibold text-gray-400">Masuk sebagai</p>
                   <p className="truncate text-sm font-bold">{namaTampil}</p>

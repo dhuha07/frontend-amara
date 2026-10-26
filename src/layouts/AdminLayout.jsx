@@ -1,8 +1,7 @@
 import { useState, useCallback } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
-import IdleTimer from "../components/IdleTimer";
 
 const KUNCI_LIPAT = "amara_sidebar_lipat";
 
@@ -17,6 +16,7 @@ function bacaLipat() {
 
 // Kerangka utama: sidebar + header + area isi halaman
 export default function AdminLayout() {
+  const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false); // drawer mobile
   const [collapsed, setCollapsed] = useState(bacaLipat); // lipat di desktop
 
@@ -37,7 +37,6 @@ export default function AdminLayout() {
 
   return (
     <div className="min-h-screen bg-app">
-      <IdleTimer />
       <Sidebar open={sidebarOpen} onClose={tutupSidebar} collapsed={collapsed} />
       <Topbar
         onMenuClick={bukaSidebar}
@@ -47,11 +46,14 @@ export default function AdminLayout() {
 
       {/* Area isi: jarak mengikuti lebar sidebar dan tinggi header */}
       <main
-        className={`pt-14 transition-[margin] duration-200 md:ml-20 ${
+        className={`pt-14 transition-[margin] duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] md:ml-20 ${
           collapsed ? "" : "lg:ml-64"
         }`}
       >
-        <Outlet />
+        {/* key membuat animasi masuk berulang di setiap pindah halaman */}
+        <div key={location.pathname} className="halaman-masuk">
+          <Outlet />
+        </div>
       </main>
     </div>
   );
