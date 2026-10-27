@@ -1,4 +1,3 @@
-import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import {
   FileText,
@@ -18,6 +17,8 @@ import EmptyState from "../components/EmptyState";
 import { SkeletonCard, SkeletonRows } from "../components/Skeleton";
 import { fetchDashboard } from "../services/dashboardService";
 import { formatTanggal } from "../utils/formatDate";
+import useDataCepat from "../hooks/useDataCepat";
+import useAngkaNaik from "../hooks/useAngkaNaik";
 
 // Ikon dan warna untuk setiap jenis notifikasi
 const NOTIF_STYLE = {
@@ -29,30 +30,22 @@ const NOTIF_STYLE = {
 };
 
 export default function Dashboard() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  // Data lama tampil seketika; data baru diambil di belakang layar
+  const { data, memuat, menyegarkan, error, muatUlang } = useDataCepat(
+    "dasbor",
+    fetchDashboard
+  );
 
-  // Ambil data dashboard dari service
-  const muatData = useCallback(async () => {
-    setLoading(true);
-    setError(false);
-    try {
-      const hasil = await fetchDashboard();
-      setData(hasil);
-    } catch {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const kpi = data?.kpi;
 
-  useEffect(() => {
-    muatData();
-  }, [muatData]);
+  // Angka berhitung naik (hook harus dipanggil sebelum return apa pun)
+  const angkaTotal = useAngkaNaik(kpi?.total ?? 0);
+  const angkaDiproses = useAngkaNaik(kpi?.diproses ?? 0);
+  const angkaSelesai = useAngkaNaik(kpi?.selesai ?? 0);
+  const angkaDarurat = useAngkaNaik(kpi?.darurat ?? 0);
 
-  // Tampilan saat error
-  if (error) {
+  // Gagal dan belum ada data sama sekali: tampilkan pesan error
+  if (error && !data) {
     return (
       <div className="p-4 md:p-6">
         <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm">
@@ -61,19 +54,18 @@ export default function Dashboard() {
             title="Gagal memuat dashboard"
             description="Terjadi kendala saat mengambil data. Silakan coba lagi."
             actionLabel="Coba Lagi"
-            onAction={muatData}
+            onAction={muatUlang}
           />
         </div>
       </div>
     );
   }
 
-  const kpi = data?.kpi;
   const persenSelesai =
     kpi && kpi.total > 0 ? Math.round((kpi.selesai / kpi.total) * 100) : 0;
 
   return (
-    <div className="p-4 md:p-6">
+    <div className="p-4 md:p-6" aria-busy={menyegarkan}>
       <div className="mb-4 flex items-start justify-between gap-3 md:mb-6">
         <div>
           <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Dashboard</h2>
@@ -83,25 +75,36 @@ export default function Dashboard() {
         </div>
         <button
           type="button"
-          onClick={muatData}
-          disabled={loading}
+          onClick={muatUlang}
+          disabled={menyegarkan}
           className="flex min-h-[44px] shrink-0 items-center gap-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald disabled:cursor-not-allowed disabled:opacity-60"
         >
-          <RefreshCw size={16} className={loading ? "animate-spin" : ""} aria-hidden="true" />
+          <RefreshCw size={16} className={menyegarkan ? "animate-spin" : ""} aria-hidden="true" />
           <span className="hidden sm:inline">Muat Ulang</span>
         </button>
       </div>
 
+      {/* Gagal menyegarkan, tetapi data lama masih ditampilkan */}
+      {error && data && (
+        <div
+          role="status"
+          className="mb-4 flex items-center gap-2 rounded-lg bg-amber-100 px-3 py-2 text-sm text-amber-800"
+        >
+          <CircleAlert size={16} aria-hidden="true" />
+          Gagal menyegarkan data. Menampilkan data terakhir.
+        </div>
+      )}
+
       {/* 4 kartu ringkasan: klik untuk membuka daftar pengaduan terfilter */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-4">
-        {loading || !kpi ? (
+        {memuat || !kpi ? (
           Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
         ) : (
           <>
             <StatCard
               icon={FileText}
               label="Total Pengaduan"
-              value={kpi.total}
+              value={angkaTotal}
               trend="Seluruh laporan yang tercatat"
               color="navy"
               to="/pengaduan"
@@ -109,7 +112,7 @@ export default function Dashboard() {
             <StatCard
               icon={Clock}
               label="Sedang Diproses"
-              value={kpi.diproses}
+              value={angkaDiproses}
               trend="Menunggu tindak lanjut petugas"
               color="amber"
               to="/pengaduan?status=Diproses"
@@ -117,7 +120,7 @@ export default function Dashboard() {
             <StatCard
               icon={CheckCircle2}
               label="Selesai"
-              value={kpi.selesai}
+              value={angkaSelesai}
               trend={`${persenSelesai}% dari total laporan`}
               color="emerald"
               to="/pengaduan?status=Selesai"
@@ -125,7 +128,7 @@ export default function Dashboard() {
             <StatCard
               icon={AlertTriangle}
               label="Darurat"
-              value={kpi.darurat}
+              value={angkaDarurat}
               trend="Perlu penanganan segera"
               color="red"
               to="/pengaduan?status=Darurat"
@@ -143,7 +146,7 @@ export default function Dashboard() {
             <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100">Notifikasi Penting</h3>
           </div>
 
-          {loading ? (
+          {memuat ? (
             <SkeletonRows rows={5} />
           ) : data?.notifikasi?.length ? (
             <ul className="divide-y divide-gray-100">
@@ -197,7 +200,7 @@ export default function Dashboard() {
             </Link>
           </div>
 
-          {loading ? (
+          {memuat ? (
             <SkeletonRows rows={5} />
           ) : data?.laporanTerbaru?.length ? (
             <ul className="divide-y divide-gray-100">
